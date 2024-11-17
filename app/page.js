@@ -1,10 +1,17 @@
-import Haider from "../app/Components/Haider/page"
-import Signup from "../app/Components/Signup/page"
+import Header from './Components/Header/page';
+import Footer from './Components/Footer/page';
+
 export default function Home() {
   return (
-   <div className="bg-gradient-to-r from-blue-800 to-black min-h-screen text-white">
-     <Haider/> 
-     {/* <Signup/> */}
-   </div>
+    <div className="min-h-screen flex flex-col justify-between bg-[#131120]">
+      <Header />
+      
+      {/* Main Content */}
+      <main className="flex-grow bg-gradient-to-b from-[#131120] to-[#000080]">
+        {/* Your main content goes here */}
+      </main>
+
+      <Footer />
+    </div>
   );
 }
