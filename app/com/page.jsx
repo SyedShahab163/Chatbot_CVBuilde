@@ -1,15 +1,15 @@
-import Footer from "../Components/Footer/page";
+// import Footer from "../Components/Footer/page";
 export default function SkillSketch() {
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-b from-[#131120] to-[#000080] p-8 space-y-12">
       {/* 1. Header and Welcome Section */}
-      <div className="w-full max-w-7xl bg-gradient-to-t from-[#504686] to-[#131120] shadow-2xl rounded-3xl  text-gray-200 min-h-[60vh] mt-4">
+      <div className="w-full max-w-7xl bg-gradient-to-t from-[#504686] to-[#131120]  shadow-2xl rounded-3xl  text-gray-200 min-h-[60vh] mt-4">
         <HeaderSection />
         {/* <WelcomeSection /> */}
       </div>
 
       {/* 2. How It Works Section */}
-      <div className="w-full max-w-7xl bg-[radial-gradient(60%_60%_at_50%_50%,_#8C86EC_1.5%,_#8C86EC_9.86%,_#4F4C86_80.01%)] rounded-2xl shadow-xl text-gray-200 p-8 border border-gray-600 min-h-[60vh]">
+      <div className="w-full max-w-7xl bg-[radial-gradient(60%_60%_at_60%_60%,_#8C86EC_1.5%,_#8C86EC_9.86%,_#4F4C86_80.01%)] rounded-2xl shadow-xl text-gray-200 p-8 border border-gray-600 min-h-[60vh]">
         <HowItWorksSection />
       </div>
 
@@ -19,9 +19,9 @@ export default function SkillSketch() {
       </div>
 
       {/* 4. Footer */}
-       <div className="w-full max-w-10xl bg-gradient-to-[#131120] rounded-2xl mt-8 text-gray-200 min-h-[26vh]">
+       {/* <div className="w-full max-w-10xl bg-gradient-to-[#131120] rounded-2xl mt-8 text-gray-200 min-h-[26vh]">
         <Footer/>
-      </div> 
+      </div>  */}
     </div>
   );
 }
@@ -37,9 +37,9 @@ function HeaderSection() {
               <p className="text-xs">"Unlocking skills, one project at a time"</p>
             </div>
             <nav className="space-x-8">
-              <a href="#home" className="hover:text-gray-300">Home</a>
+              <a href="/com" className="hover:text-gray-300">Home</a>
               <a href="/login" className="hover:text-gray-300">Login</a>
-              <a href="#signup" className="hover:text-gray-300">Signup</a>
+              <a href="/Signup" className="hover:text-gray-300">Signup</a>
     
             </nav>
           
@@ -109,24 +109,18 @@ function HowItWorksSection() {
 function FeaturesSection() {
   return (
     <>
-      {/* <h2 className="text-2xl font-bold mb-8 text-left">Features</h2>
-      <div className="grid grid-cols-2 gap-8 text-center">
-        <FeatureCard title="Effortless Documentation" description="Streamline the process of recording your work experiences and achievements." />
-        <FeatureCard title="AI-Powered Writing" description="Use cutting-edge AI to craft professional journal entries from simple inputs." />
-        <FeatureCard title="Comprehensive Journal Management" description="Easily track, filter, and manage entries, keeping your career story organized." />
-        <FeatureCard title="Custom CV Generator" description="Generate CVs tailored to any job description, ensuring your achievements stand out." />
-      </div> */}
+
         <section className="p-8 border-b border-gray-600">
            <h2 className="text-2xl font-bold mb-8 text-left font-inika text-black inline-block border-b-4 border-white pb-1">Features</h2>
            <div className="grid grid-cols-2 gap-8 text-center relative">
              {/* Vertical and Horizontal Lines */}
              <div className="absolute inset-0 flex items-center justify-center">
-  <div className="w-[4px] h-full bg-white"></div>
-</div>
+                 <div className="w-[4px] h-full bg-white"></div>
+         </div>
 
-  <div className="absolute inset-0 flex items-center">
-  <div className="w-full h-[4px] bg-white"></div>
-   </div>
+           <div className="absolute inset-0 flex items-center">
+          <div className="w-full h-[4px] bg-white"></div>
+              </div>
              <div>
                <h3 className="font-bold text-xl text-left">Effortless Documentation</h3>
                <p className="text-white text-left mt-8 text-xs">Streamline the process of recording

@@ -2,6 +2,7 @@
   "name": "chatbot_cvbuilder",
   "version": "0.1.0",
   "private": true,
+  "proxy" : "https://chatbotcv-t5h0c8cj.b4a.run/signup",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,9 +12,12 @@
   "dependencies": {
     "@headlessui/react": "^2.2.0",
     "axios": "^1.7.7",
+    "cors": "^2.8.5",
+    "express": "^4.21.1",
     "next": "15.0.2",
     "react": "19.0.0-rc-02c0e824-20241028",
-    "react-dom": "19.0.0-rc-02c0e824-20241028"
+    "react-dom": "19.0.0-rc-02c0e824-20241028",
+    "react-hot-toast": "^2.4.1"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
