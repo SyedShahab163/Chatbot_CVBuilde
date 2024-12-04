@@ -18,7 +18,7 @@ export default function Home() {
       </div>
 
       {/* 4. Footer */}
-      <div className="w-full max-w-7xl bg-gradient-to-b from-[#131120] to-[#000080] rounded-2xl mt-8 text-gray-200 min-h-[26vh]">
+      <div className="w-full max-w-8xl bg-gradient-to-b from-[#131120] to-[#000080] rounded-2xl mt-4 text-gray-200 min-h-[2vh]">
         <Footer />
       </div> 
     </div>
