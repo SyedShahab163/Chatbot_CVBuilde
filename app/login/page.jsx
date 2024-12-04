@@ -49,7 +49,7 @@ const Page = () => {
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-inika">Skill Sketch</h1>
-            <p className="text-sm">"Unlocking skills, one project at a time"</p>
+            <p className="text-xs">"Unlocking skills, one project at a time"</p>
           </div>
           <nav className="space-x-8">
             <Link href="/" className="hover:text-gray-300">Home</Link>

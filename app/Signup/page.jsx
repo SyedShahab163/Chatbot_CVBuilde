@@ -6,11 +6,10 @@ import React, { useEffect } from "react";
 import {useRouter} from "next/navigation";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-
 import Footer from "../Footers/page";
 
 
-export default function SignupPage() {
+export default function SignupPage() {0
     const router = useRouter();
     const [user, setUser] = React.useState({
         email: "",
@@ -43,20 +42,6 @@ export default function SignupPage() {
         }
     }
 
-    // const response = await fetch("https://chatbotcv-t5h0c8cj.b4a.run/signup", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //        'Access-Control-Allow-Origin': 'p'
-    //     },
-    //     body: JSON.stringify({
-    //       email: "user@gmail.com",
-    //       username: "testuser",
-    //       password: "password123",
-    //     }),
-    //   });
-    // }
-
     useEffect(() => {
         if(user.email.length > 0 && user.password.length > 0 && user.username.length > 0) {
             setButtonDisabled(false);
@@ -66,50 +51,14 @@ export default function SignupPage() {
     }, [user]);
 
 
-    // return (
-    // <div className="flex flex-col items-center justify-center min-h-screen py-2">
-    //     <h1>{loading ? "Processing" : "Signup"}</h1>
-    //     <hr />
-    //     <label htmlFor="username">username</label>
-    //     <input 
-    //     className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black"
-    //         id="username"
-    //         type="text"
-    //         value={user.username}
-    //         onChange={(e) => setUser({...user, username: e.target.value})}
-    //         placeholder="username"
-    //         />
-    //     <label htmlFor="email">email</label>
-    //     <input 
-    //     className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black"
-    //         id="email"
-    //         type="text"
-    //         value={user.email}
-    //         onChange={(e) => setUser({...user, email: e.target.value})}
-    //         placeholder="email"
-    //         />
-    //     <label htmlFor="password">password</label>
-    //     <input 
-    //     className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black"
-    //         id="password"
-    //         type="password"
-    //         value={user.password}
-    //         onChange={(e) => setUser({...user, password: e.target.value})}
-    //         placeholder="password"
-    //         />
-    //         <button
-    //         onClick={onSignup}
-    //         className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600">{buttonDisabled ? "No signup" : "Signup"}</button>
-    //         <Link href="/Iogin">Visit login page</Link>
-    //     </div>
-    // )
+   
     return (
             <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#131120] to-[#000080] text-white font-sans">
                     <header className="relative p-6 bg-gradient-to-b from-[#504686] to-[#131120] text-white shadow-lg rounded-b-lg">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-inika">Skill Sketch</h1>
-            <p className="text-sm">"Unlocking skills, one project at a time"</p>
+            <p className="text-xs">Unlocking skills, one project at a time</p>
           </div>
           <nav className="space-x-8">
             <Link href="/" className="hover:text-gray-300">Home</Link>
@@ -155,7 +104,7 @@ export default function SignupPage() {
                       id="username"
                       name="username"
                       value={user.username}
-                      onCha  onChange={(e) => setUser({...user, username: e.target.value})}nge={onSignup}
+                       onChange={(e) => setUser({...user, username: e.target.value})}
                       className="w-full p-2 border rounded mt-1 text-black"
                       placeholder="Choose a username"
                       required
@@ -194,13 +143,17 @@ export default function SignupPage() {
                     />
                   </div>
         
-                   <button
+                   {/* <button
                     type="onSignup"
                     className="w-full bg-blue-700 text-white py-2 rounded hover:bg-blue-800 transition"
                    >
                     <Link href={"/login"}/>
                     Sign Up
-                  </button> 
+                  </button>  */}
+                   <button
+             onClick={onSignup}
+           className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600">{buttonDisabled ? "No signup" : "Signup"}</button>
+             <Link href="/login">Visit login page</Link>
                 </form>
               </div>
               <div><Footer/></div>
