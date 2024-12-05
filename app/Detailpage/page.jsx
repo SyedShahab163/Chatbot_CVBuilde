@@ -16,6 +16,7 @@
   const [jobDescription, setJobDescription] = useState('');
   const [cvPointers, setCvPointers] = useState([]);
   const [errors, setErrors] = useState(false);
+  const [name ,setname] = useState()
   const handleSubmit = async () => {
     if (!selectedType || !description) {
       alert("Please select a type and add a description!");
@@ -202,7 +203,7 @@
 
           {/* Navigation Links */}
           <nav className="absolute top-4 right-4 flex gap-6 text-sm text-xl font-inika">
-            <a href="#" className="hover:underline">Welcome! Rajeev</a>
+            <a href="#" className="hover:underline">{name}</a>
             <a href="#" className="hover:underline">Logout</a>
             <a href="#" className="hover:underline">Create New Entry</a>
             <a href="#" className="hover:underline">View Journal</a>
@@ -320,7 +321,7 @@
   </div>
 </div>
 
-<div className="border-white border-b"></div>
+<div className=" item-center justify-center border-white border-b w-2/1"></div>
 
 
       {/* <div className="container mx-auto p-6 w-full"> */}
