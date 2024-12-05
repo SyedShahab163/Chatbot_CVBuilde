@@ -35,7 +35,7 @@ function HeaderSection() {
           <p className="text-xs">"Unlocking skills, one project at a time"</p>
         </div>
         <nav className="space-x-8 mt-4 md:mt-0">
-          <a href="/com" className="hover:text-gray-300">Home</a>
+          <a href="/home" className="hover:text-gray-300">Home</a>
           <a href="/login" className="hover:text-gray-300">Login</a>
           <a href="/Signup" className="hover:text-gray-300">Signup</a>
         </nav>

@@ -214,8 +214,7 @@ export default function com() {
             <a href="#" className="hover:text-gray-300">Login</a>
             <a href="#" className="hover:text-gray-300">Signup</a>
           </nav>
-        </div>
-        
+        </div>        
       </header>
 
       {/* Main Content */}
