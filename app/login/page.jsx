@@ -30,7 +30,7 @@ const Page = () => {
         body: JSON.stringify(formData),
       });
 
-      if (!response.ok) {
+      if (!response.status===200) {
         window.location.href = "/Detailpage";
       }
 

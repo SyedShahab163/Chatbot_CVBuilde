@@ -192,10 +192,7 @@
       <div className="w-full max-w-8xl mx-auto bg-gradient-to-b from-[#504686] to-[#131120] text-white rounded-lg p-8 shadow-full mt-4">
         {/* Header Section */}
         <div className="relative mb-8">
-          {/* <div className="text-left">
-            <h1 className="text-3xl font-bold">Skill Sketch</h1>
-            <p className="text-sm italic mt-1">"Sketching skills, one project at a time"</p>
-          </div> */}
+          
             <div className="text-left">
               <Link href="/">
             <h1 className="text-3xl font-inika">Skill Sketch</h1>
@@ -553,10 +550,7 @@
           Copy Text
         </button>
       </div> */}
-      <div className="w-full p-6 rounded-lg shadow-lg">
-     
-      {/* <h1 className="text-white text-xl font-bold mb-4 h-10 bg-[#4F4B68]">Paste the Job Description</h1>
-       */}
+      <div className="w-full p-6 rounded-lg shadow-lg">     
       <textarea
       
         className="w-full h-24 p-3 rounded-lg  bg-[#4F4B68] text-white  focus:outline-none font-bold"
@@ -605,11 +599,13 @@
           <input
             type="text"
             className="w-1/ bg-[#4F4B68] text-white rounded-lg p-2 focus:outline-none"
+               placeholder="To: DD/MM/YY"
           />
           <span className="text-white px-2">to</span>
           <input
             type="text"
-            className="w-1/ bg-gray-500 text-gray-800 rounded-lg p-2 focus:outline-none"
+            className="w-1/ bg-[#4F4B68] text-white rounded-lg p-2 focus:outline-none"
+               placeholder="To: DD/MM/YY"
           />
         </div>
 
@@ -635,10 +631,10 @@
       </button>
     </div>
       <footer className="w-full">
-        <div className="container mx-auto px-8">
-          <div className="relative flex items-center justify-center">
+        <div className="container mx-auto px-8 w-full">
+          <div className="relative flex items-center justify-center w-full">
             <div className="absolute left-0 w-3 h-3 bg-white rotate-45 transform"></div>
-            <div className="h-[4px] bg-white w-full mx-4"></div>
+            <div className="h-[4px] bg-white w-full mx-4 w-full"></div>
             <div className="absolute right-0 w-3 h-3 bg-white rotate-45 transform"></div>
           </div>
           <div className="mt-4 flex flex-col md:flex-row md:justify-between items-center text-xs text-gray-300">
