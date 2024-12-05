@@ -5,17 +5,21 @@
  export default function DetailPage() {
   const [selectedType, setSelectedType] = useState(""); // To store selected type
   const [description, setDescription] = useState(""); // To store description
+
   const [apiResponse, setApiResponse] = useState(""); // To store API response
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileName, setFileName] = useState('');
   const [apiData, setApiData] = useState([]);
+
   const [date,  setdate] = useState([]);
   const [keyword,  setkeyword] = useState([]);
   const [company_name,  setcompany_name] = useState([]);
   const [detailDescription, setDetailDescription] = useState('');
+
   const [jobDescription, setJobDescription] = useState('');
   const [cvPointers, setCvPointers] = useState([]);
   const [errors, setErrors] = useState(false);
+  const [name ,setname] = useState()
   const handleSubmit = async () => {
     if (!selectedType || !description) {
       alert("Please select a type and add a description!");
@@ -31,14 +35,26 @@
         body: JSON.stringify({ entry_type: selectedType, description }),
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        setApiResponse(`Success: ${JSON.stringify(data)}`);
+     if (response.ok) {
+        const data_gpt = await response.json();
+        console.log("---data_gpt---------------------", data_gpt);
+        console.log("---data_gpt.date---------------------", data_gpt.date);
+        console.log("---data_gpt.company_name---------------------", data_gpt.company_name);
+        setApiResponse(`Success: ${JSON.stringify(data_gpt)}`);
+
+        // Update state variables with the data from the API response
+        setdate(data_gpt.date || '');
+        setcompany_name(data_gpt.company_name || '');
+        setkeyword(data_gpt.keywords || '');
+        setDetailDescription(data_gpt.detail_description || '');
+        // setDetailDescription(data_gpt.detail_description || '');
       } else {
-        setApiResponse(`Error: Failed to submit. Status: ${response.status}`);
+        setApiResponse(`Error: Failed to submit. Status: `);
+        //${response.status}
       }
     } catch (error) {
-      setApiResponse(`Error: ${error.message}`);
+      setApiResponse(`Error: `);
+     // ${error.message}
     }
   };
   const handleFileSelect = (e) => {
@@ -110,10 +126,12 @@
 
     try {
       // API call
-      const response = await axios.post("https://chatbotcv-t5h0c8cj.b4a.run/view_journal", {
-        keywords,
-        from_date: fromDate,
-        to_date: toDate,
+      const response = await axios.get("https://chatbotcv-t5h0c8cj.b4a.run/view_journal", {
+        params: {
+          keywords,
+          from_date: fromDate,
+          to_date: toDate,
+        },
       });
 
       // Update journal entries state
@@ -150,7 +168,7 @@
       }
 
       const result = await response.json();
-      console.log('Success:', result);
+      //console.log('Success:', result);
       // Optionally, show a success message or handle the response
     } catch (error) {
       console.error('Error:', error);
@@ -192,10 +210,7 @@
       <div className="w-full max-w-8xl mx-auto bg-gradient-to-b from-[#504686] to-[#131120] text-white rounded-lg p-8 shadow-full mt-4">
         {/* Header Section */}
         <div className="relative mb-8">
-          {/* <div className="text-left">
-            <h1 className="text-3xl font-bold">Skill Sketch</h1>
-            <p className="text-sm italic mt-1">"Sketching skills, one project at a time"</p>
-          </div> */}
+          
             <div className="text-left">
               <Link href="/">
             <h1 className="text-3xl font-inika">Skill Sketch</h1>
@@ -205,7 +220,7 @@
 
           {/* Navigation Links */}
           <nav className="absolute top-4 right-4 flex gap-6 text-sm text-xl font-inika">
-            <a href="#" className="hover:underline">Welcome! Rajeev</a>
+            <a href="#" className="hover:underline">{name}</a>
             <a href="#" className="hover:underline">Logout</a>
             <a href="#" className="hover:underline">Create New Entry</a>
             <a href="#" className="hover:underline">View Journal</a>
@@ -262,14 +277,16 @@
           {/* API Response */}
      
       </div >
-      {apiResponse && (
+      {/* {apiResponse && (
             <div className="mt-4 bg-purple-800  justify-center items-center text-white p-4 rounded-lg ">
               <strong></strong> {apiResponse}
             </div>
-          )}
+          )} */}
         </div>
 
-        {/* Additional Inputs */}
+        {/* Additional Inputs */} 
+        {/* -------------------------------GPT-ENTITY-------------------------------------------------------------------------------------------- */}
+
 <div className=" relative mt-6 item-center justify-center text-center mb-4 p-4">
   {/* Inputs */}
   <div className="flex gap-30 mb-4 p-6">
@@ -323,7 +340,7 @@
   </div>
 </div>
 
-<div className="border-white border-b"></div>
+<div className=" item-center justify-center border-white border-b w-2/1"></div>
 
 
       {/* <div className="container mx-auto p-6 w-full"> */}
@@ -553,10 +570,7 @@
           Copy Text
         </button>
       </div> */}
-      <div className="w-full p-6 rounded-lg shadow-lg">
-     
-      {/* <h1 className="text-white text-xl font-bold mb-4 h-10 bg-[#4F4B68]">Paste the Job Description</h1>
-       */}
+      <div className="w-full p-6 rounded-lg shadow-lg">     
       <textarea
       
         className="w-full h-24 p-3 rounded-lg  bg-[#4F4B68] text-white  focus:outline-none font-bold"
@@ -605,11 +619,13 @@
           <input
             type="text"
             className="w-1/ bg-[#4F4B68] text-white rounded-lg p-2 focus:outline-none"
+               placeholder="To: DD/MM/YY"
           />
           <span className="text-white px-2">to</span>
           <input
             type="text"
-            className="w-1/ bg-gray-500 text-gray-800 rounded-lg p-2 focus:outline-none"
+            className="w-1/ bg-[#4F4B68] text-white rounded-lg p-2 focus:outline-none"
+               placeholder="To: DD/MM/YY"
           />
         </div>
 
@@ -635,10 +651,10 @@
       </button>
     </div>
       <footer className="w-full">
-        <div className="container mx-auto px-8">
-          <div className="relative flex items-center justify-center">
+        <div className="container mx-auto px-8 w-full">
+          <div className="relative flex items-center justify-center w-full">
             <div className="absolute left-0 w-3 h-3 bg-white rotate-45 transform"></div>
-            <div className="h-[4px] bg-white w-full mx-4"></div>
+            <div className="h-[4px] bg-white w-full mx-4 w-full"></div>
             <div className="absolute right-0 w-3 h-3 bg-white rotate-45 transform"></div>
           </div>
           <div className="mt-4 flex flex-col md:flex-row md:justify-between items-center text-xs text-gray-300">
