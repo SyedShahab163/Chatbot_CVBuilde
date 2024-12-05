@@ -9,6 +9,7 @@ const Page = () => {
   });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [notsuccess, setnotsuccess] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,12 +30,18 @@ const Page = () => {
         },
         body: JSON.stringify(formData),
       });
+      console.log(response.ok,"-----ok-----------------------------------------------",response)
+      console.log(response.status,"-----status-----------------------------------------------",response.json())
 
-      if (!response.status===200) {
+      if (response.ok) {
         window.location.href = "/Detailpage";
-      }
+        setSuccess(true);
+        
 
-      setSuccess(true);
+      }else{
+        setnotsuccess(true)
+      }
+      
       setFormData({ email: '', password: '' });
       setError(null);
     } catch (err) {
@@ -69,7 +76,8 @@ const Page = () => {
         >
           <h2 className="text-xl font-bold mb-4">Login</h2>
           {error && <p className="text-red-500">{error}</p>}
-          {success && <p className="text-green-500">Logged in successfully!</p>}
+          {success && <p className="text-green-500">Logged in successfully !</p>}
+          {notsuccess && <p className="text-red-500"> Invalid credentials !</p>}
           <div className="mb-4">
             <label htmlFor="email" className="block text-sm font-medium">Email:</label>
             <input
