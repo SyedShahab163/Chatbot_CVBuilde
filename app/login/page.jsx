@@ -31,7 +31,7 @@ const Page = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Login failed. Please check your credentials.');
+        window.location.href = "/Detailpage";
       }
 
       setSuccess(true);
@@ -48,7 +48,9 @@ const Page = () => {
       <header className="relative p-6 bg-gradient-to-b from-[#504686] to-[#131120] text-white shadow-lg rounded-b-lg">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-inika">Skill Sketch</h1>
+            <Link href="/">
+            <h1 className="text-3xl font-inika">Skill Sketch</h1>
+            </Link>
             <p className="text-xs">"Unlocking skills, one project at a time"</p>
           </div>
           <nav className="space-x-8">
