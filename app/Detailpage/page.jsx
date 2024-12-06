@@ -16,7 +16,7 @@
   const [company_name,  setcompany_name] = useState([]);
   const [detailDescription, setDetailDescription] = useState('');
 
-  const [jobDescription, setJobDescription] = useState('');
+  // const [Description, setDescription] = useState('');
   const [cvPointers, setCvPointers] = useState([]);
   const [errors, setErrors] = useState(false);
   const [name ,setname] = useState()
@@ -89,8 +89,8 @@
     console.log("-------formData-----------------------",formData)
 
     // try {
-      // const response = await fetch('https://chatbotcv-t5h0c8cj.b4a.run/upload_pdf', { //
-        const response = await fetch('http://127.0.0.1:8000/upload_pdf', {   
+      const response = await fetch('https://chatbotcv-t5h0c8cj.b4a.run/upload_pdf', { //
+        // const response = await fetch('http://127.0.0.1:8000/upload_pdf', {   
         method: 'POST',
         body: formData,
       });
@@ -197,10 +197,11 @@
       //console.log('Success:', result);
       // Optionally, show a success message or handle the response
     } catch (error) {
-      console.error('Error:', error);
+      //console.error('Error:', error);
       // Optionally, show an error message
     }
   };
+<<<<<<< HEAD
   // //--------------------------------------Bulk upload RECORD data
 
   // const [b_date,  set_b_date] = useState("");
@@ -220,10 +221,24 @@
   //   // try {
   //     // const response = await fetch('https://chatbotcv-t5h0c8cj.b4a.run/record_entry', {
   //     const response = await fetch('http://127.0.0.1:8000/record_entry/', {
+=======
+  // const handleGenerateCvPointers = async () => {
+  //   if (!description || description.length > 400) {
+  //     // setError(true);
+  //      // Show error if description is empty or exceeds word limit
+  //     return;
+  //   }
+    
+  //   const data = { description: description };
+
+  //   try {
+  //     const response = await fetch('https://chatbotcv-t5h0c8cj.b4a.run/generate_cv', {
+>>>>>>> 2c7d2e32a146978989510dc66bc4ea32485e757d
   //       method: 'POST',
   //       headers: {
   //         'Content-Type': 'application/json',
   //       },
+<<<<<<< HEAD
   //       body: JSON.stringify(b_data),
   //     });
 
@@ -294,36 +309,68 @@ const BulkRecordhandle = async (index) => {
 
 
 
+=======
+  //       body: JSON.stringify(data),
+  //     });
+     
+
+  //     if (!response.ok) {
+  //       throw new Error('Failed to generate CV pointers');
+  //     }
+
+  //     const result = await response.json();
+  //     setCvPointers(result.pointers || []);
+  //     // console.log(result.pointers,"------------------" )
+  //     setErrors(false); // Reset error state
+  //   } catch (error) {
+  //     // console.error('Error:', error);
+  //     setErrors(true); // Show error if API fails
+  //   }
+  // };
+>>>>>>> 2c7d2e32a146978989510dc66bc4ea32485e757d
   const handleGenerateCvPointers = async () => {
-    if (!jobDescription || jobDescription.length > 400) {
-      setError(true); // Show error if description is empty or exceeds word limit
+    if (!description || description.length > 400) {
+      setError(true); // Show error if description is invalid
       return;
     }
-    
-    const data = { job_description: jobDescription };
+
+    const data = { description };
 
     try {
-      const response = await fetch('https://chatbotcv-t5h0c8cj.b4a.run/generate_cv', {
-        method: 'POST',
+      const response = await fetch("https://chatbotcv-t5h0c8cj.b4a.run/generate_cv", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to generate CV pointers');
+        throw new Error("Failed to generate CV pointers");
       }
 
-      const result = await response.json();
-      setCvPointers(result.pointers || []);
-      setErrors(false); // Reset error state
+      const result = await response.text(); // Get raw text response
+
+      // Parse the response into a structured format
+      const parsedPointers = result
+        .split("\n\n") // Split by double newlines to separate companies
+        .filter((block) => block.trim() !== "") // Remove empty blocks
+        .map((block) => {
+          const lines = block.split("\n").filter((line) => line.trim() !== ""); // Split by newlines and clean up
+          return {
+            companyName: lines[0]?.replace("Company name: ", "").trim(), // Extract company name
+            pointers: lines.slice(1).map((line) => line.replace(/^(\d+\.\s)/, "").trim()), // Extract pointers
+          };
+        });
+
+      setCvPointers(parsedPointers); // Update the state with parsed data
+      // setError(false); // Reset error state
     } catch (error) {
-      console.error('Error:', error);
-      setErrors(true); // Show error if API fails
+      // console.error("Error:", error);
+      // setError(true); // Show error if API fails
     }
   };
-
+  
   return (
     <div className="min-h-screen item-center bg-gradient-to-b from-[#131120] to-[#000080] text-white p-4">
       <div className="w-full max-w-8xl mx-auto bg-gradient-to-b from-[#504686] to-[#131120] text-white rounded-lg p-8 shadow-full mt-4">
@@ -461,7 +508,7 @@ const BulkRecordhandle = async (index) => {
       {/* <div className="container mx-auto p-6 w-full"> */}
         {/* Header Section */}
         <div className="w-[99%] max-w-8xl mx-auto  text-white rounded-lg p-8 shadow-full mt-4 p-4">
-          <h1 className="  justify-center items-center text-2xl text-center mt-2 font-bold py-2 bg-[#4F4B68]  rounded-full inline-block w-[10%]">
+          <h1 className="  justify-center items-center text-2xl text-center mt-2 font-bold py-2 bg-[#4F4B68]  rounded-full inline-block w-[12%]">
                   Bulk Entry
           </h1>
         {/* </div> */}
@@ -614,7 +661,12 @@ const BulkRecordhandle = async (index) => {
               <button className="px-6 py-2  bg-[#4F4B68] rounded-lg hover: bg-[#4F4B68]">
                 Edit
               </button>
+<<<<<<< HEAD
               <button className="px-6 py-2  bg-[#4F4B68] rounded-lg hover: bg-[#4F4B68]" onClick={BulkRecordhandle}
+=======
+              <button className="px-6 py-2  bg-[#4F4B68] rounded-lg hover: bg-[#4F4B68]"
+                   onClick={handleRecordClick}
+>>>>>>> 2c7d2e32a146978989510dc66bc4ea32485e757d
               >
                 Record
               </button>
@@ -635,7 +687,7 @@ const BulkRecordhandle = async (index) => {
       <div className=" item-left text-left w-full p-8 rounded-lg shadow-lg"> 
         <button
           onClick={fetchJournalEntries}
-          className="text-2xl text-center font-bold py-2  bg-[#4F4B68] rounded-full inline-block w-[15%]"
+          className="text-xl text-center font-bold py-2  bg-[#4F4B68] rounded-full inline-block w-[12%]"
         >
           View Journal
         </button>
@@ -682,41 +734,12 @@ const BulkRecordhandle = async (index) => {
         {/* Journal Entries */}
         <div className="space-y-6 w-full mt-6 ">
           {journalEntries.map((entry, index) => (
-    //         <div
-    //           key={index}
-    //           className=" p-6 rounded-lg shadow-md w-full"
-    //         >
-    //           <div className="flex flex-col md:flex-row md:space-x-4 w-full">
-    //             <span className="text-white text-sm md:text-base w-full">
-    //               Date: {entry.date}
-    //             </span>
-    //             <span className="  text-white px-4 py-2 rounded-lg text-sm w-full text-center">
-    //               {entry.companyName}
-    //             </span>
-    //             <input
-    //               type="text"
-                  
-    //               readOnly
-    //               className="  text-white rounded-lg py-3 px-4 focus:outline-none w-full"
-    //             />
-    //                 <input
-    //   // type="text"
-    //   placeholder="Keyword"
-    //   value={entry.keyword}
-    //   // onChange={(e) => setkeyword(e.target.value)}
-    //   className="w-1/2 bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
-    // />
-    //           </div>
-    //           <div className="text-white mt-4 w-full">{entry.description}</div>
-    //         </div>
-    <div className=" relative mt-6 item-center justify-center text-center mb-4 p-4">
+    
+    <div 
+    key={index}
+    className=" relative mt-6 item-center justify-center text-center mb-4 p-4">
   {/* Inputs */}
-  <div 
-   key={index}
-  className="flex gap-30 mb-4 p-6">
-
-               {/* className=" p-6 rounded-lg shadow-md w-full"
-             ></div> */}
+  <div className="flex gap-30 mb-4 p-6">
     <input
       type="text"
       value={entry.date}
@@ -746,7 +769,7 @@ const BulkRecordhandle = async (index) => {
       rows="3"
       placeholder="Detail Description"
       className="w-[98%] bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
-      value={entry.detailDescription}
+      value={entry.detail_description}
      
     ></textarea>
   </div>
@@ -760,18 +783,18 @@ const BulkRecordhandle = async (index) => {
       </div>
 
       <div className="w-full p-6 rounded-lg shadow-lg"> 
-      <h1 className="  justify-left items-left text-xl text-center mt-2 font-bold py-2 bg-[#4F4B68]  rounded-full inline-block w-[10%]">
+      <h1 className="  justify-left items-left text-xl text-center mt-2 font-bold py-2 bg-[#4F4B68]  rounded-full inline-block w-[12%]">
       Generate CV 
           </h1>    
-      <textarea
+      {/* <textarea
       
         className="w-full h-24 p-3 rounded-lg  bg-[#4F4B68] text-white  focus:outline-none font-bold mt-4"
         placeholder="Paste the Job Description"
        
-        value={jobDescription}
-        onChange={(e) => setJobDescription(e.target.value)}
-      ></textarea>
-       <p className="item-right text-right">Word Limit : 400</p>
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+      ></textarea> */}
+       {/* <p className="item-right text-right">Word Limit : 400</p>
       {error && <p className="text-red-500 text-sm mt-2">Please ensure the description is under 400 characters.</p>}
       <div className="flex items-center justify-end space-x-4">
       <button
@@ -779,12 +802,29 @@ const BulkRecordhandle = async (index) => {
         onClick={handleGenerateCvPointers}
       >
         Generate CV
-      </button>
-            </div>
-      <div className="mt-6">
+      </button> */}
+            {/* </div> */}
+            {/* {cvPointers.length === 0 ? (
+  <p>No CV pointers generated yet.</p>
+) : (
+  cvPointers.map((pointer, index) => (
+    <div key={index} className="mb-4">
+      <h3 className="font-semibold">Company name:</h3>
+      <ul className="list-disc pl-6">
+        <li>{result.pointer}</li>
+        
+              </ul>
+    </div> */}
+  
+  {/* ))
+
+)
+ }   */}
+ 
+      {/* /* <div className="mt-6">
        
-        <div className="mt-2 text-white">
-          {cvPointers.length === 0 ? (
+        <div className="mt-2 text-white"> */} 
+          {/* {cvPointers.length === 0 ? (
             <p></p>
           ) : (
             cvPointers.map((pointer, index) => (
@@ -793,14 +833,47 @@ const BulkRecordhandle = async (index) => {
                 <ul className="list-disc pl-6">
                   <li>{pointer}</li>
                   {/* Add more pointers if needed */}
-                </ul>
+                {/* </ul>
               </div>
             ))
-          )}
+          )} */} 
+        {/* </div>
+      </div> */}
+ <div className="min-h-screen bg-[#4F4B68] mt-6 text-white p-6">
+  <textarea
+    className="w-full h-24 p-3 rounded-lg bg-[#4F4B68]  text-white focus:outline-none font-bold mt-4"
+    placeholder="Paste the Job Description"
+    value={description}
+    onChange={(e) => setDescription(e.target.value)}
+  ></textarea>
+  <p className="text-right">Word Limit: 400</p>
+  {/* {error && <p className="text-red-500 text-sm mt-2">Please ensure the description is under 400 characters.</p>} */}
+  <div className="flex items-center justify-end space-x-4">
+    <button
+      className="bg-[#4F4B68] hover:bg-[#4F4B68] text-white font-bold py-2 px-4 rounded-full mt-4 w-[20%]"
+      onClick={handleGenerateCvPointers}
+    >
+      Generate CV
+    </button>
+  </div>
+  <div className="mt-6">
+    {cvPointers.length > 0 ? (
+      cvPointers.map((company, index) => (
+        <div key={index} className="mb-6">
+          <h3 className="font-semibold text-lg">Company Name: {company.companyName}</h3>
+          <ul className="list-disc pl-6 mt-2">
+            {company.pointers.map((pointer, i) => (
+              <li key={i}>{pointer}</li>
+            ))}
+          </ul>
         </div>
-      </div>
-
-      <button className=" bg-[#4F4B68] hover:bg-[#4F4B68] text-white font-bold py-2 px-4 rounded-full mt-6 w-[20%]">
+      ))
+    ) : (
+      <p className="text-gray-400">No CV pointers generated yet. Enter a description and click "Generate CV."</p>
+    )}
+  </div>
+</div>
+      <button className=" bg-[#4F4B68] hover:bg-[#4F4B68] text-white font-bold py-2 px-4 rounded-full mt-6 w-[18%]">
         Generate Appraisal Report
       </button>
 
@@ -812,13 +885,13 @@ const BulkRecordhandle = async (index) => {
           <input
             type="text"
             className="w-1/ bg-[#4F4B68] text-white rounded-lg p-2 focus:outline-none"
-               placeholder="To: DD/MM/YY"
+               placeholder="To: YY-MM-DD "
           />
           <span className="text-white px-2">to</span>
           <input
             type="text"
             className="w-1/ bg-[#4F4B68] text-white rounded-lg p-2 focus:outline-none"
-               placeholder="To: DD/MM/YY"
+               placeholder="To: YY-MM-DD"
           />
         </div>
 
