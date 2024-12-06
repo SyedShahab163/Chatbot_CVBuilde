@@ -18,7 +18,7 @@ export default function Home() {
       </div>
 
       {/* 4. Footer */}
-      <div className="w-full max-w-7xl bg-gradient-to-b from-[#131120] to-[#000080] rounded-2xl mt-8 text-gray-200 min-h-[26vh]">
+      <div className="w-full max-w-8xl bg-gradient-to-b from-[#131120] to-[#000080] rounded-2xl mt-4 text-gray-200 min-h-[2vh]">
         <Footer />
       </div> 
     </div>
@@ -35,7 +35,7 @@ function HeaderSection() {
           <p className="text-xs">"Unlocking skills, one project at a time"</p>
         </div>
         <nav className="space-x-8 mt-4 md:mt-0">
-          <a href="/com" className="hover:text-gray-300">Home</a>
+          <a href="/#" className="hover:text-gray-300">Home</a>
           <a href="/login" className="hover:text-gray-300">Login</a>
           <a href="/Signup" className="hover:text-gray-300">Signup</a>
         </nav>
