@@ -158,7 +158,7 @@
       // Update journal entries state
       setJournalEntries(response.data || []);
     } catch (err) {
-      console.error("API Error:", err);
+      // console.error("API Error:", err);
 
       // Use dummy data as fallback
       setError(true);
@@ -251,7 +251,7 @@
         
           {/* Curved Line */}
           <div className="relative mt-6  ">
-            <div className="h-[2px] bg-black w-[90%] mx-auto rounded-full"></div>
+            <div className="h-[2px] bg-black w-[85%] mx-auto rounded-full"></div>
             {/* <div className="absolute top-[-2px] h-[1px] w-[60%] left-[20%] bg-black rotate-[1deg]"></div> */}
           </div>
         </div>
@@ -290,7 +290,7 @@
 
           {/* Submit Button */}
           <div className="flex justify-end mt-4">
-            <button onClick={handleSubmit} className="bg-secondary px-6 py-2 rounded-lg">
+            <button onClick={handleSubmit} className=" bg-[#4F4B68] px-6 py-2 rounded-lg">
               Submit
             </button>
           </div>
@@ -298,11 +298,6 @@
           {/* API Response */}
      
       </div >
-      {/* {apiResponse && (
-            <div className="mt-4 bg-purple-800  justify-center items-center text-white p-4 rounded-lg ">
-              <strong></strong> {apiResponse}
-            </div>
-          )} */}
         </div>
 
         {/* Additional Inputs */} 
@@ -316,14 +311,14 @@
       value={date}
       onChange={(e) => setdate(e.target.value)}
       placeholder="Date"
-      className="w-1/4 bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
+      className="w-1/5 bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
     />
     <input
       type="text"
       placeholder="Company Name"
       value={company_name}
       onChange={(e) => setcompany_name(e.target.value)}
-      className="w-1/4 bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
+      className="w-1/3 bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
     />
     <input
       type="text"
@@ -339,7 +334,7 @@
     <textarea
       rows="3"
       placeholder="Detail Description"
-      className="w-[99%] bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
+      className="w-[98%] bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
       value={detailDescription}
       onChange={(e) => setDetailDescription(e.target.value)}
     ></textarea>
@@ -348,8 +343,8 @@
   {/* Additional Textarea */}
   
   {/* Buttons */}
-  <div className="flex justify-end mt-6 space-x-4">
-    <button className="px-6 py-2 bg-[#4F4B68] text-white rounded-lg hover:bg-opacity-80 ">
+  <div className="flex justify-end mt-6 space-x-4 p-4">
+    <button className="px-6 py-2 bg-[#4F4B68] text-white rounded-lg hover:bg-opacity-70 ">
       Edit
     </button>
     <button
@@ -367,7 +362,7 @@
 
       {/* <div className="container mx-auto p-6 w-full"> */}
         {/* Header Section */}
-        <div className="w-[99%] max-w-8xl mx-auto  text-white rounded-lg p-8 shadow-full mt-4 ">
+        <div className="w-[99%] max-w-8xl mx-auto  text-white rounded-lg p-8 shadow-full mt-4 p-4">
           <h1 className="  justify-center items-center text-2xl text-center mt-2 font-bold py-2 bg-[#4F4B68]  rounded-full inline-block w-[10%]">
                   Bulk Entry
           </h1>
@@ -405,7 +400,7 @@
 
         <div>
         {apiData.map((entry, index) => (
-          <div key={index} className="  bg-[#4F4B68]  p-4 rounded-lg mb-6 border border-white">
+          <div key={index} className="p-4 rounded-lg mb-6">
             {/* Date & Company Row */}
             <div className="flex items-center justify-between mb-4">
               <span className="text-white">Date: {entry.date}</span>
@@ -420,7 +415,7 @@
                 type="text"
                 value={entry.keyword}
                 placeholder="Keyword"
-                className="w-1/3 px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-gray-300 focus:outline-none"
+                className="w-1/3 px-3 py-2  border-gray-700 rounded-lg text-gray-300 focus:outline-none"
                 readOnly
               />
             </div>
@@ -501,105 +496,92 @@
         )}
 
         {/* Journal Entries */}
-        <div className="space-y-6 w-full mt-6 border border-white">
+        <div className="space-y-6 w-full mt-6 ">
           {journalEntries.map((entry, index) => (
-            <div
-              key={index}
-              className=" bg-[#4F4B68] p-6 rounded-lg shadow-md w-full"
-            >
-              <div className="flex flex-col md:flex-row md:space-x-4 w-full">
-                <span className="text-white text-sm md:text-base w-full">
-                  Date: {entry.date}
-                </span>
-                <span className=" bg-[#4F4B68] text-white px-4 py-2 rounded-lg text-sm w-full text-center">
-                  {entry.companyName}
-                </span>
-                <input
-                  type="text"
-                  value={entry.keyword}
-                  readOnly
-                  className=" bg-[#4F4B68] text-white rounded-lg py-3 px-4 focus:outline-none w-full"
-                />
-              </div>
-              <div className="text-white mt-4 w-full">{entry.description}</div>
-            </div>
+    //         <div
+    //           key={index}
+    //           className=" p-6 rounded-lg shadow-md w-full"
+    //         >
+    //           <div className="flex flex-col md:flex-row md:space-x-4 w-full">
+    //             <span className="text-white text-sm md:text-base w-full">
+    //               Date: {entry.date}
+    //             </span>
+    //             <span className="  text-white px-4 py-2 rounded-lg text-sm w-full text-center">
+    //               {entry.companyName}
+    //             </span>
+    //             <input
+    //               type="text"
+                  
+    //               readOnly
+    //               className="  text-white rounded-lg py-3 px-4 focus:outline-none w-full"
+    //             />
+    //                 <input
+    //   // type="text"
+    //   placeholder="Keyword"
+    //   value={entry.keyword}
+    //   // onChange={(e) => setkeyword(e.target.value)}
+    //   className="w-1/2 bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
+    // />
+    //           </div>
+    //           <div className="text-white mt-4 w-full">{entry.description}</div>
+    //         </div>
+    <div className=" relative mt-6 item-center justify-center text-center mb-4 p-4">
+  {/* Inputs */}
+  <div 
+   key={index}
+  className="flex gap-30 mb-4 p-6">
+
+               {/* className=" p-6 rounded-lg shadow-md w-full"
+             ></div> */}
+    <input
+      type="text"
+      value={entry.date}
+      onChange={(e) => setdate(e.target.value)}
+      placeholder="Date"
+      className="w-1/5 bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
+    />
+    <input
+      type="text"
+      placeholder="Company Name"
+      value={entry.companyName}
+      onChange={(e) => setcompany_name(e.target.value)}
+      className="w-1/3 bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
+    />
+    <input
+      type="text"
+      placeholder="Keyword"
+      value={entry.keyword}
+      onChange={(e) => setkeyword(e.target.value)}
+      className="w-1/2 bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
+    />
+  </div>
+
+  {/* Detail Description */}
+  <div className="w-full flex justify-center mb-4">
+    <textarea
+      rows="3"
+      placeholder="Detail Description"
+      className="w-[98%] bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
+      value={entry.detailDescription}
+     
+    ></textarea>
+  </div>
+
+  {/* Additional Textarea */}
+  
+  {/* Buttons */}
+</div>
           ))}
         </div>
       </div>
 
-             {/* <div className="w-full  p-6 rounded-lg shadow-lg">
-        <h1 className="text-white text-xl font-bold mb-4">Paste the Job Description</h1>
-        <textarea
-          className="w-full h-24 p-3 rounded-lg bg-gray-500 text-white border border-gray-300 focus:outline-none i"
-          placeholder="Word Limit : 400"
-        ></textarea>
-        <button className=" bg-secondary/50 hover: bg-secondary/50 text-white font-bold py-2 px-4 rounded-full mt-4 w-[20%] item-right">
-          Generate CV Pointers
-        </button>
-
-        <div className="mt-6">
-          <h2 className="text-white text-lg font-bold ">CV Pointers</h2>
-          <div className="mt-2 text-white">
-            <div className="mb-4">
-              <h3 className="font-semibold">Company name :</h3>
-              <ul className="list-disc pl-6">
-                <li>Pointer in Star format</li>
-                <li>Pointer in Star format</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold">Company name :</h3>
-              <ul className="list-disc pl-6">
-                <li>Pointer in Star format</li>
-                <li>Pointer in Star format</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <button className=" bg-secondary/50 hover: bg-secondary/50 text-white font-bold py-2 px-4 rounded-full mt-6 w-[20%]  ">
-          Generate Appraisal Report
-        </button>
-
-        <div className="mt-6">
-          <h2 className="text-white  bg-gray-500text-lg font-bold">Appraisal Report</h2>
-          <div className="flex items-center justify-between mt-2">
-            <input
-              type="month"
-              className="w-1/2 bg-gray-500 text-gray-800 rounded-lg p-2 focus:outline-none"
-            />
-            <span className="text-white px-2">to</span>
-            <input
-              type="month"
-              className="w-1/2 bg-gray-500 text-gray-800 rounded-lg p-2 focus:outline-none"
-            />
-          </div>
-
-          <div className="mt-4">
-            <div className="mb-4 text-white">
-              <h3 className="font-semibold">Month / Year</h3>
-              <ul className="list-disc pl-6">
-                <li>...</li>
-                <li>...</li>
-              </ul>
-            </div>
-            <div className="text-white">
-              <h3 className="font-semibold">Month / Year</h3>
-              <ul className="list-disc pl-6">
-                <li>...</li>
-                <li>...</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <button className=" bg-secondary/50 hover: bg-secondary/50 text-white font-bold py-2 px-4 rounded mt-4 w-20% text-right item-right">
-          Copy Text
-        </button>
-      </div> */}
-      <div className="w-full p-6 rounded-lg shadow-lg">     
+      <div className="w-full p-6 rounded-lg shadow-lg"> 
+      <h1 className="  justify-left items-left text-xl text-center mt-2 font-bold py-2 bg-[#4F4B68]  rounded-full inline-block w-[10%]">
+      Generate CV 
+          </h1>    
       <textarea
       
-        className="w-full h-24 p-3 rounded-lg  bg-[#4F4B68] text-white  focus:outline-none font-bold"
+        className="w-full h-24 p-3 rounded-lg  bg-[#4F4B68] text-white  focus:outline-none font-bold mt-4"
         placeholder="Paste the Job Description"
        
         value={jobDescription}
@@ -607,13 +589,14 @@
       ></textarea>
        <p className="item-right text-right">Word Limit : 400</p>
       {error && <p className="text-red-500 text-sm mt-2">Please ensure the description is under 400 characters.</p>}
+      <div className="flex items-center justify-end space-x-4">
       <button
-        className=" bg-[#4F4B68] hover:bg-[#4F4B68] text-white font-bold py-2 px-4 rounded-full mt-4 w-[20%] item-right"
+        className=" bg-[#4F4B68] hover:bg-[#4F4B68] text-white font-bold py-2 px-4 rounded-full mt-4 w-[20%] item-end"
         onClick={handleGenerateCvPointers}
       >
         Generate CV
       </button>
-
+            </div>
       <div className="mt-6">
        
         <div className="mt-2 text-white">
