@@ -57,14 +57,21 @@
      // ${error.message}
     }
   };
+
+  // ---------------Handle pdf file----------------------------
   const handleFileSelect = (e) => {
+    console.log("----e.target---------------",e.target);
+
+    // const files = e.target.files;
     const file = e.target.files[0];
-    if (file && file.type === 'application/pdf') {
-      setSelectedFile(file);
-      setFileName(file.name);
-    } else {
-      alert('Please select a valid PDF file');
-    }
+    console.log("----file---------------",file);
+
+      if (file) {
+        setSelectedFile(file); //selectedFile
+        setFileName(file.name);
+        console.log("-----file name has been set");
+      }
+    
   };
 
   // Function to handle file submission and API call
@@ -75,10 +82,12 @@
     }
 
     const formData = new FormData();
-    formData.append('file', selectedFile);
+    formData.append('files', selectedFile);
+    console.log("-------formData-----------------------",formData)
 
-    try {
-      const response = await fetch('https://chatbotcv-t5h0c8cj.b4a.run/upload_pdf', {
+    // try {
+      // const response = await fetch('https://chatbotcv-t5h0c8cj.b4a.run/upload_pdf', { //
+        const response = await fetch('http://127.0.0.1:8000/upload_pdf', {   
         method: 'POST',
         body: formData,
       });
@@ -89,12 +98,24 @@
 
       const data = await response.json(); // API response
       setApiData(data); // Dynamically render based on API response
-      alert('File uploaded successfully');
-    } catch (error) {
-    //   console.error('Error:', error);
-      alert('Error uploading file');
-    }
-  };const [keywords, setKeywords] = useState("");
+      // alert('File uploaded successfully');
+    // } catch (error) {
+    // //   console.error('Error:', error);
+    //   alert('Error uploading file');
+    // }
+  };
+  
+  const handleFileSelectAndSubmit = (e) => {
+    handleFileSelect(e);
+    // handleSubmit();
+  };
+
+  // useEffect(() => {
+  //   // This effect will run whenever fileName changes
+  //   console.log("FileName updated:", fileName);
+  // }, [fileName]);
+
+  const [keywords, setKeywords] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
 
@@ -337,6 +358,7 @@
 
 <div className=" item-center justify-center border-white border-b w-2/1"></div>
 
+    {/* -------------------------------Bulk Entry-------------------------------------------------------------------------------------------- */}
 
       {/* <div className="container mx-auto p-6 w-full"> */}
         {/* Header Section */}
@@ -352,33 +374,31 @@
           <button className="px-4 py-2">
             Upload Old CV
           </button>
-          <input
-            type="file"
-            accept=".pdf"
+          <input  type="file" accept=".pdf"  className="hidden"  id="file-upload" onChange={handleFileSelect}/>
           
-            className="hidden"
-            id="file-upload"
-          />
           <label
-            htmlFor="file-upload"
-            className="px-4 py-2 b   bg-[#4F4B68]  hover:bg-[#4F4B68]  cursor-pointer"
-          >
-            Select PDF File
-          </label>
-          <button
-            onClick={handleFileSelect}
-            className="px-4 py-2  bg-[#4F4B68]  hover:bg-[#4F4B68] "
-          >
+            htmlFor="file-upload" 
+            className="px-4 py-2 b   bg-[#4F4B68]  hover:bg-[#4F4B68]  cursor-pointer" > Select PDF File </label>
+         
+          {/* <button onClick={handleFileSelect} className="px-4 py-2  bg-[#4F4B68]  hover:bg-[#4F4B68] ">
             Upload
-          </button >
+          </button> */}
+
           <span className=" ">{fileName || 'File Name.pdf'}</span>
+
+          {/* <input type="file" onChange={handleFileSelectAndSubmit} /> */}
           <button  
            onClick={handleSubmits}
-          className="px-6 py-2  bg-[#4F4B68]  hover:bg-[#4F4B68] ">
+          //  onClick={handleFileSelect}
+          className="px-4 py-2  bg-[#4F4B68]  hover:bg-[#4F4B68] ">
             Submit
           </button>
         </div> 
+
         {/* Render Dynamic Forms Based on API Data */}
+        {apiData.length > 0 && (
+
+        <div>
         {apiData.map((entry, index) => (
           <div key={index} className="p-4 rounded-lg mb-6">
             {/* Date & Company Row */}
@@ -420,8 +440,14 @@
             </div>
           </div>
         ))}        
+      </div> )}
       </div>
+      
       </div>
+
+      
+
+
       <div className=" item-left text-left w-full p-8 rounded-lg shadow-lg"> 
         <button
           onClick={fetchJournalEntries}
