@@ -5,14 +5,17 @@
  export default function DetailPage() {
   const [selectedType, setSelectedType] = useState(""); // To store selected type
   const [description, setDescription] = useState(""); // To store description
+
   const [apiResponse, setApiResponse] = useState(""); // To store API response
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileName, setFileName] = useState('');
   const [apiData, setApiData] = useState([]);
+
   const [date,  setdate] = useState([]);
   const [keyword,  setkeyword] = useState([]);
   const [company_name,  setcompany_name] = useState([]);
   const [detailDescription, setDetailDescription] = useState('');
+
   const [jobDescription, setJobDescription] = useState('');
   const [cvPointers, setCvPointers] = useState([]);
   const [errors, setErrors] = useState(false);
@@ -32,14 +35,26 @@
         body: JSON.stringify({ entry_type: selectedType, description }),
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        setApiResponse(`Success: ${JSON.stringify(data)}`);
+     if (response.ok) {
+        const data_gpt = await response.json();
+        console.log("---data_gpt---------------------", data_gpt);
+        console.log("---data_gpt.date---------------------", data_gpt.date);
+        console.log("---data_gpt.company_name---------------------", data_gpt.company_name);
+        setApiResponse(`Success: ${JSON.stringify(data_gpt)}`);
+
+        // Update state variables with the data from the API response
+        setdate(data_gpt.date || '');
+        setcompany_name(data_gpt.company_name || '');
+        setkeyword(data_gpt.keywords || '');
+        setDetailDescription(data_gpt.detail_description || '');
+        // setDetailDescription(data_gpt.detail_description || '');
       } else {
-        setApiResponse(`Error: Failed to submit. Status: ${response.status}`);
+        setApiResponse(`Error: Failed to submit. Status: `);
+        //${response.status}
       }
     } catch (error) {
-      setApiResponse(`Error: ${error.message}`);
+      setApiResponse(`Error: `);
+     // ${error.message}
     }
   };
   const handleFileSelect = (e) => {
@@ -111,10 +126,12 @@
 
     try {
       // API call
-      const response = await axios.post("https://chatbotcv-t5h0c8cj.b4a.run/view_journal", {
-        keywords,
-        from_date: fromDate,
-        to_date: toDate,
+      const response = await axios.get("https://chatbotcv-t5h0c8cj.b4a.run/view_journal", {
+        params: {
+          keywords,
+          from_date: fromDate,
+          to_date: toDate,
+        },
       });
 
       // Update journal entries state
@@ -151,7 +168,7 @@
       }
 
       const result = await response.json();
-      console.log('Success:', result);
+      //console.log('Success:', result);
       // Optionally, show a success message or handle the response
     } catch (error) {
       console.error('Error:', error);
@@ -226,7 +243,7 @@
           <div className="flex gap-2 mb-4">
             <button
               className={`py-2 px-4 rounded-lg ${
-                selectedType === "Professional" ? "bg-secondary/80" : "bg-secondary/50"
+                selectedType === "Professional" ? "bg-[#4F4B68]" : "bg-[#4F4B68]0"
               }`}
               onClick={() => setSelectedType("Professional")}
             >
@@ -234,7 +251,7 @@
             </button>
             <button
               className={`py-2 px-4 rounded-lg ${
-                selectedType === "Educational" ? "bg-secondary/80" : "bg-secondary/50"
+                selectedType === "Educational" ? "bg-[#4F4B68]" : "bg-[#4F4B68]"
               }`}
               onClick={() => setSelectedType("Educational")}
             >
@@ -247,7 +264,7 @@
             placeholder="Write about your work / Project / Duration"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full bg-secondary/50 text-white p-3 rounded-lg outline-none"
+            className="w-full bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
           ></textarea> 
 
           {/* Submit Button */}
@@ -260,14 +277,16 @@
           {/* API Response */}
      
       </div >
-      {apiResponse && (
+      {/* {apiResponse && (
             <div className="mt-4 bg-purple-800  justify-center items-center text-white p-4 rounded-lg ">
               <strong></strong> {apiResponse}
             </div>
-          )}
+          )} */}
         </div>
 
-        {/* Additional Inputs */}
+        {/* Additional Inputs */} 
+        {/* -------------------------------GPT-ENTITY-------------------------------------------------------------------------------------------- */}
+
 <div className=" relative mt-6 item-center justify-center text-center mb-4 p-4">
   {/* Inputs */}
   <div className="flex gap-30 mb-4 p-6">
