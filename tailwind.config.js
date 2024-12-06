@@ -1,5 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  rules: {
+    "react/no-unescaped-entities": "off",
+  },
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -8,11 +11,20 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        primary: "#504686",
+        secondary: "#131120",
         customBlack: '#00010C',
         customBlue: '#050B72',
         'header-gradient-start': '#504686',
         'header-gradient-end': '#131120',
         'footer-bg': '#131120',
+
+      },
+      gradientColorStops: {
+        header: {
+          from: "#504686",
+          to: "#131120",
+        },
       },
       backgroundImage: {
         'custom-gradient': 'linear-gradient(180deg, #504686 0%, #131120 30.5%, #131120 65%)',

@@ -9,6 +9,7 @@ const Page = () => {
   });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [notsuccess, setnotsuccess] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,12 +30,18 @@ const Page = () => {
         },
         body: JSON.stringify(formData),
       });
+      console.log(response.ok,"-----ok-----------------------------------------------",response)
+      console.log(response.status,"-----status-----------------------------------------------",response.json())
 
-      if (!response.ok) {
-        throw new Error('Login failed. Please check your credentials.');
+      if (response.ok) {
+        window.location.href = "/Detailpage";
+        setSuccess(true);
+        
+
+      }else{
+        setnotsuccess(true)
       }
-
-      setSuccess(true);
+      
       setFormData({ email: '', password: '' });
       setError(null);
     } catch (err) {
@@ -48,8 +55,10 @@ const Page = () => {
       <header className="relative p-6 bg-gradient-to-b from-[#504686] to-[#131120] text-white shadow-lg rounded-b-lg">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-inika">Skill Sketch</h1>
-            <p className="text-sm">"Unlocking skills, one project at a time"</p>
+            <Link href="/">
+            <h1 className="text-3xl font-inika">Skill Sketch</h1>
+            </Link>
+            <p className="text-xs">"Unlocking skills, one project at a time"</p>
           </div>
           <nav className="space-x-8">
             <Link href="/" className="hover:text-gray-300">Home</Link>
@@ -67,7 +76,8 @@ const Page = () => {
         >
           <h2 className="text-xl font-bold mb-4">Login</h2>
           {error && <p className="text-red-500">{error}</p>}
-          {success && <p className="text-green-500">Logged in successfully!</p>}
+          {success && <p className="text-green-500">Logged in successfully !</p>}
+          {notsuccess && <p className="text-red-500"> Invalid credentials !</p>}
           <div className="mb-4">
             <label htmlFor="email" className="block text-sm font-medium">Email:</label>
             <input
