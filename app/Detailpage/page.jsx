@@ -1,5 +1,6 @@
  "use client";
  import { useState } from "react";
+ import { useRef } from 'react';
  import Link from 'next/link';
  import axios from "axios";
  export default function DetailPage() {
@@ -26,6 +27,8 @@
   const [name ,setname] = useState()
 
   const [bulkData, setBulkData] = useState([]); // Initialize state with the API data
+  const cvRef = useRef(null);
+  const viewJourRef = useRef(null);
 
   const handleSubmit = async () => {
     if (!selectedType || !description) {
@@ -400,6 +403,21 @@ const  datas =[
     }
   };
 
+
+  //-------------------------------scroll BTNs----------------------------------
+
+  const handleGenerateCVClick = () => {
+    if (cvRef.current) {
+      cvRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleViewJournal = () => {
+    if (viewJourRef.current) {
+      viewJourRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
     
   return (
     <div className="min-h-screen item-center bg-gradient-to-b from-[#131120] to-[#000080] text-white p-4">
@@ -419,8 +437,8 @@ const  datas =[
             <a href="#" className="hover:underline">{name}</a>
             <a href="#" className="hover:underline">Logout</a>
             <a href="#" className="hover:underline">Create New Entry</a>
-            <a href="#" className="hover:underline">View Journal</a>
-            <a href="#" className="hover:underline">Generate CV</a>
+            <a className="hover:underline" onClick={handleGenerateCVClick} >View Journal</a>
+            <a className="hover:underline" onClick={handleViewJournal} >Generate CV</a>
           </nav>
         {/* </div> */}
         
@@ -644,7 +662,7 @@ const  datas =[
       </div>
       
       </div>
-      <div className=" item-left text-left w-full p-8 rounded-lg shadow-lg"> 
+      <div className=" item-left text-left w-full p-8 rounded-lg shadow-lg" ref={viewJourRef}>  
         <button
           onClick={fetchJournalEntries}
           className="text-xl text-center font-bold py-2  bg-[#4F4B68] rounded-full inline-block w-[12%]"
@@ -742,7 +760,7 @@ const  datas =[
         </div>
       </div>
 
-      <div className="w-full p-6 rounded-lg shadow-lg"> 
+      <div className="w-full p-6 rounded-lg shadow-lg" ref={cvRef}> 
       <h1 className="  justify-left items-left text-xl text-center mt-2 font-bold py-2 bg-[#4F4B68]  rounded-full inline-block w-[12%]">
       Generate CV 
           </h1>    
