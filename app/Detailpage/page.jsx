@@ -128,7 +128,7 @@
   const [journalEntries, setJournalEntries] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-
+  const [journalEntrie, setJournalEntrie] = useState([]);
   // Dummy Data (for fallback in case of API error)
   const dummyData = [
     {
@@ -311,33 +311,54 @@ const  datas =[
       // setError(true); // Show error if API fails
     }
   };
-  const handleappraisal = async () => {
-    setLoading(true);
-    setError(false);
+  const [startDate, setStartDate] = useState(""); // State for "From" input
+  const [endDate, setEndDate] = useState(""); // State for "To" input
+
+  // Initialize with hardcoded numerical data
+  const [appraisalData, setAppraisalData] = useState([
+    {
+      month: 1, // January
+      year: 2024,
+      details: [5, 20], // Numerical details: e.g., completed projects, revenue growth percentage
+    },
+    {
+      month: 2, // February
+      year: 2024,
+      details: [8, 25], // Numerical details
+    },
+  ]);
+
+  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [hasError, setHasError] = useState(false); // Error state
+
+  const handleAppraisal = async () => {
+    setIsLoading(true);
+    setHasError(false);
 
     try {
-      // API call
-      const response = await axios.get("https://chatbotcv-t5h0c8cj.b4a.run/generate_appraisal_report", {
-        params: {
-          keywords,
-          from_date: fromDate,
-          to_date: toDate,
+      const response = await axios.post(
+        "http://127.0.0.1:8000/generate_appraisal_report",
+        {
+          from_date: startDate,
+          to_date: endDate,
         },
-      });
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      // Update journal entries state
-      setJournalEntries(response.data || []);
+      // Update state with API response
+      setAppraisalData(response.data || []);
     } catch (err) {
       // console.error("API Error:", err);
-
-      // Use dummy data as fallback
-      setError(true);
-      setJournalEntries(dummyData);
+      setHasError(true);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
-   
+
     
   return (
     <div className="min-h-screen item-center bg-gradient-to-b from-[#131120] to-[#000080] text-white p-4">
@@ -579,76 +600,9 @@ const  datas =[
       </div>
     )}
   </div>
-
-
-
-
-
-{/*
-    {apiData.length > 0 && (
-
-      <div>
-        {apiData.map((entry, index) => (
-          <div key={index} className="p-4 rounded-lg mb-6">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-white" value={entry.date} onChange={(e) => set_b_date(e.target.value)}>Date: {entry.date} </span>
-             
-              <input
-                type="text"
-                onChange={(e) => set_b_company_name(e.target.value)}
-                value={entry.company_name}
-                placeholder="Company Name"
-                className="w-1/3 px-3 py-2 bg-[#4F4B68] border border-gray-700 rounded-lg text-gray-300 focus:outline-none"
-                // readOnly
-              />
-              <input
-                type="text" 
-                value={entry.keywords}
-
-                onChange={(e) => {
-                  set_b_keywords(e.target.value);
-                  console.log('Keywords:----------------------------------------kk-----', e.target.value);
-                }}
-                placeholder="Keyword"
-                className="w-1/3 px-3 py-2 bg-[#4F4B68]  border-gray-700 rounded-lg text-gray-300 focus:outline-none"
-                // readOnly
-              />            
-            </div>
-            <div className="mb-4">
-              <textarea
-                rows="3" 
-                onChange={(e) => set_b_detail_description(e.target.value)}
-
-                value={entry.detail_description}
-                placeholder="Detail Description"
-                className="w-full px-3 py-2 bg-[#4F4B68] border border-gray-700 rounded-lg text-gray-300 focus:outline-none"
-              ></textarea>
-            </div>
-
-            <div className="flex items-center justify-end space-x-4">
-              <button className="px-6 py-2  bg-[#4F4B68] rounded-lg hover: bg-[#4F4B68]">
-                Edit
-              </button>
-
-              <button className="px-6 py-2  bg-[#4F4B68] rounded-lg hover: bg-[#4F4B68]" onClick={BulkRecordhandle}
-
-              >
-                Record
-              </button>
-            </div>
-          </div>
-        ))}        
-      </div> 
-    )}  
-    
-    */}
       </div>
       
       </div>
-
-      
-
-
       <div className=" item-left text-left w-full p-8 rounded-lg shadow-lg"> 
         <button
           onClick={fetchJournalEntries}
@@ -668,14 +622,14 @@ const  datas =[
           />
           <input
             type="text"
-            placeholder="From: DD/MM/YY"
+            placeholder="From: YY-MM-DD"
             value={fromDate}
             onChange={(e) => setFromDate(e.target.value)}
             className=" bg-[#4F4B68] text-white rounded-lg py-3 px-4 focus:outline-none w-full"
           />
           <input
             type="text"
-            placeholder="To: DD/MM/YY"
+            placeholder="To: YY-MM-DD"
             value={toDate}
             onChange={(e) => setToDate(e.target.value)}
             className=" bg-[#4F4B68] text-white rounded-lg py-3 px-4 focus:outline-none w-full"
@@ -751,60 +705,7 @@ const  datas =[
       <h1 className="  justify-left items-left text-xl text-center mt-2 font-bold py-2 bg-[#4F4B68]  rounded-full inline-block w-[12%]">
       Generate CV 
           </h1>    
-      {/* <textarea
-      
-        className="w-full h-24 p-3 rounded-lg  bg-[#4F4B68] text-white  focus:outline-none font-bold mt-4"
-        placeholder="Paste the Job Description"
-       
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      ></textarea> */}
-       {/* <p className="item-right text-right">Word Limit : 400</p>
-      {error && <p className="text-red-500 text-sm mt-2">Please ensure the description is under 400 characters.</p>}
-      <div className="flex items-center justify-end space-x-4">
-      <button
-        className=" bg-[#4F4B68] hover:bg-[#4F4B68] text-white font-bold py-2 px-4 rounded-full mt-4 w-[20%] item-end"
-        onClick={handleGenerateCvPointers}
-      >
-        Generate CV
-      </button> */}
-            {/* </div> */}
-            {/* {cvPointers.length === 0 ? (
-  <p>No CV pointers generated yet.</p>
-) : (
-  cvPointers.map((pointer, index) => (
-    <div key={index} className="mb-4">
-      <h3 className="font-semibold">Company name:</h3>
-      <ul className="list-disc pl-6">
-        <li>{result.pointer}</li>
-        
-              </ul>
-    </div> */}
-  
-  {/* ))
-
-)
- }   */}
- 
-      {/* /* <div className="mt-6">
-       
-        <div className="mt-2 text-white"> */} 
-          {/* {cvPointers.length === 0 ? (
-            <p></p>
-          ) : (
-            cvPointers.map((pointer, index) => (
-              <div key={index} className="mb-4">
-                <h3 className="font-semibold">Company name:</h3>
-                <ul className="list-disc pl-6">
-                  <li>{pointer}</li>
-                  {/* Add more pointers if needed */}
-                {/* </ul>
-              </div>
-            ))
-          )} */} 
-        {/* </div>
-      </div> */}
- {/* <div className="min-h-screen bg-[#4F4B68] mt-6 text-white p-6"> */}
+     
   <textarea
     className="w-full h-24 p-3 rounded-lg bg-[#4F4B68]  text-white focus:outline-none font-bold mt-4"
     placeholder="Paste the Job Description"
@@ -821,7 +722,7 @@ const  datas =[
       Generate CV
     </button>
   </div>
-  <div className="mt-6">
+  <div className="mt-6 bg-[#4F4B68]">
     {cvPointers.length > 0 ? (
       cvPointers.map((company, index) => (
         <div key={index} className="mb-6">
@@ -842,44 +743,80 @@ const  datas =[
         Generate Appraisal Report
       </button>
 
-      <div className="mt-6">
-        
-        <div className="flex items-center justify-between mt-2">
-        <span className="text-white px-2">from</span>
-       
+ {/* <div className="p-6 bg-[#131120] min-h-screen text-white"> */}
+      {/* Date Range Input Section */}
+      <div className="flex items-center justify-between space-x-2 mb-6">
+        <div className="flex flex-col">
+          <span>From</span>
           <input
             type="text"
-            className="w-1/ bg-[#4F4B68] text-white rounded-lg p-2 focus:outline-none"
-               placeholder="To: YY-MM-DD "
+            placeholder="From: YY-MM-DD"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="bg-[#4F4B68] text-white rounded-lg py-3 px-4 focus:outline-none"
           />
-          <span className="text-white px-2">to</span>
+        </div>
+        <div className="flex flex-col">
+          <span>To</span>
           <input
             type="text"
-            className="w-1/ bg-[#4F4B68] text-white rounded-lg p-2 focus:outline-none"
-               placeholder="To: YY-MM-DD"
+            placeholder="To: YY-MM-DD"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="bg-[#4F4B68] text-white rounded-lg py-3 px-4 focus:outline-none"
           />
         </div>
-
-        <div className="mt-4">
-          <div className="mb-4 text-white">
-            <h3 className="font-semibold">Month / Year</h3>
-            <ul className="list-disc pl-6">
-              <li>...</li>
-              <li>...</li>
-            </ul>
-          </div>
-          <div className="text-white">
-            <h3 className="font-semibold">Month / Year</h3>
-            <ul className="list-disc pl-6">
-              <li>...</li>
-              <li>...</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <button className="bg-[#4F4B68] hover:bg-[#4F4B68] text-white font-bold py-2 px-4 rounded mt-4 w-20% text-right item-right">
-        Copy Text
+        <button
+        onClick={handleAppraisal}
+        className="bg-[#4F4B68] hover:bg-[#6B6584] text-white font-bold py-2 px-4 rounded-full mb-6"
+        disabled={isLoading}
+      >
+        {isLoading ? "Generating..." : "Generate Report"}
       </button>
+      </div>
+
+      {/* Generate Button */}
+      
+
+      {/* Error Message */}
+      {hasError && (
+        <div className="text-red-500 font-semibold mb-4">
+          Failed to fetch data. Please try again.
+        </div>
+      )}
+
+      {/* Journal Entries Section */}
+      <div className="space-y-6">
+        {appraisalData.length > 0 ? (
+          appraisalData.map((entry, index) => (
+            <div
+              key={index}
+              className="bg-[#4F4B68] p-4 rounded-lg shadow-lg mb-4"
+            >
+              <div className="text-center font-semibold text-lg">
+                Month: {entry.month}, Year: {entry.year}
+              </div>
+              <ul className="list-disc pl-6">
+                <li>Total Projects Completed: {entry.details[0]}</li>
+                <li>Revenue Growth (%): {entry.details[1]}</li>
+              </ul>
+            </div>
+          ))
+        ) : (
+          <div className="text-gray-400">No data available. Please generate a report.</div>
+        )}
+      </div>
+    {/* </div> */}
+    {/* </div> */}
+    
+    <div className="flex items-center justify-end space-x-4">
+    <button
+      className="bg-[#4F4B68] hover:bg-[#4F4B68] text-white font-bold py-2 px-4 rounded-full mt-4 w-[20%]"
+     
+    >
+      copy text
+    </button>
+  </div>
     </div>
       <footer className="w-full">
         <div className="container mx-auto px-8 w-full">
