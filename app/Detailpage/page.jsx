@@ -148,7 +148,7 @@
   ];
 
   // Function to handle API request
-  const fetchJournalEntries = async () => {
+  const fetchJournalEntrieshandle = async () => {
     setLoading(true);
     setError(false);
 
@@ -489,14 +489,14 @@ const BulkRecordhandle = async (index) => {
     <input
       type="text"
       placeholder="Company Name"
-      value={company_name}
+      value={ company_name}
       onChange={(e) => setcompany_name(e.target.value)}
       className="w-1/3 bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
     />
     <input
       type="text"
       placeholder="Keyword"
-      value={keyword}
+      value={keywords}
       onChange={(e) => setkeyword(e.target.value)}
       className="w-1/2 bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
     />
@@ -639,7 +639,7 @@ const BulkRecordhandle = async (index) => {
       </div>
       <div className=" item-left text-left w-full p-8 rounded-lg shadow-lg"> 
         <button
-          onClick={fetchJournalEntries}
+          onClick={fetchJournalEntrieshandle}
           className="text-xl text-center font-bold py-2  bg-[#4F4B68] rounded-full inline-block w-[12%]"
         >
           View Journal
@@ -669,7 +669,7 @@ const BulkRecordhandle = async (index) => {
             className=" bg-[#4F4B68] text-white rounded-lg py-3 px-4 focus:outline-none w-full"
           />
           <button
-            onClick={fetchJournalEntries}
+            onClick={fetchJournalEntrieshandle}
             className=" bg-[#4F4B68] hover: bg-[#4F4B68] text-white font-bold py-3 px-6 rounded w-full"
           >
             Search
@@ -703,7 +703,7 @@ const BulkRecordhandle = async (index) => {
     <input
       type="text"
       placeholder="Company Name"
-      value={entry.companyName}
+      value={entry.company_name}
       onChange={(e) => setcompany_name(e.target.value)}
       className="w-1/3 bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
     />
@@ -874,7 +874,7 @@ const BulkRecordhandle = async (index) => {
 
       {/* Show/Hide Dummy Data */}
       {showData && (
-        <div className="bg-[#4F4B68] h-20 p-4 mb-6">
+        <div className="bg-[#4F4B68] h-20 p-4 mb-6 rounded-lg">
           {dummyDatas.map((entry, index) => (
             <div key={index}>
               <h4 className="text-xl font-bold">
