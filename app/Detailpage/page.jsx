@@ -4,7 +4,11 @@
  import axios from "axios";
  export default function DetailPage() {
   const [selectedType, setSelectedType] = useState(""); // To store selected type
-  const [description, setDescription] = useState(""); // To store description
+  const [description, setDescription] = useState(""); // To cv generatestore description
+
+  const [cv_description, set_cv_description] = useState(""); // To cv generatestore description
+  const [cv_error, set_Cv_Error] = useState(false);
+
 
   const [apiResponse, setApiResponse] = useState(""); // To store API response
   const [selectedFile, setSelectedFile] = useState(null);
@@ -30,7 +34,9 @@
     }
 
     try {
-      const response = await fetch("https://chatbotcv-t5h0c8cj.b4a.run/entry_to_gpt", {
+      // const response = await fetch("https://chatbotcv-t5h0c8cj.b4a.run/entry_to_gpt", {
+      const response = await fetch('http://127.0.0.1:8000/entry_to_gpt', {   
+  
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -89,8 +95,8 @@
     console.log("-------formData-----------------------",formData)
 
     // try {
-      const response = await fetch('https://chatbotcv-t5h0c8cj.b4a.run/upload_pdf', { //
-        // const response = await fetch('http://127.0.0.1:8000/upload_pdf', {   
+      // const response = await fetch('https://chatbotcv-t5h0c8cj.b4a.run/upload_pdf', { //
+        const response = await fetch('http://127.0.0.1:8000/upload_pdf', {   
         method: 'POST',
         body: formData,
       });
@@ -171,17 +177,23 @@
     } finally {
       setLoading(false);
     }
+
+
+  // -----------------------------------------------------------------RECORD entry  
+
   };
     const handleRecordClick = async () => {
     const data = {
-      date: '2024-01-01',
-      company_name: 'my_company',
-      keyword: 'It_job',
+      date: date,
+      company_name: company_name,
+      keyword: keyword,
       detail_description: detailDescription,
     };
+    console.log("-------entry record-----------------data---------------------------",data)
 
     try {
       const response = await fetch('https://chatbotcv-t5h0c8cj.b4a.run/record_entry', {
+        // const response = await fetch('http://127.0.0.1:8000/record_entry', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -194,6 +206,7 @@
       }
 
       const result = await response.json();
+      console.log("-------entry record-------------api----result---------------------------",result)
       //console.log('Success:', result);
       // Optionally, show a success message or handle the response
     } catch (error) {
@@ -228,6 +241,7 @@ const handleInputChange = (index, field, value) => {
   setBulkData(updatedBulkData);
 };
 
+// -----------------------------------------------------------bulk record-------------------------------
 const BulkRecordhandle = async (index) => {
   const b_data = {
     date: bulkData[index].date,
@@ -262,54 +276,81 @@ const BulkRecordhandle = async (index) => {
 
 const  datas =[
       {
-      company_name:"ABC",
-       work1: "A paragraph is a series of sentences that are organized and coherent, and are all related to a single topic. Almost every piece of writing you do that is longer than a few sentences should be organized into paragraphs."},
+        companyName:"ABC",
+       work: "A paragraph is a series of sentences that are organized and coherent,",
+       
+      work:"are all related to a single topic. Almost every piece of writing you do that is longer than a few sentences should be organized into paragraphs."
+       },
+
        {
-      work2:"A paragraph is a series of sentences that are organized and coherent, and are all related to a single topic. Almost every piece of writing you do that is longer than a few sentences should be organized into paragraphs."
+        companyName:"XYZ",
+       work: "A paragraph is a series of sentences that are organized and coherent,",
+       
+      work:"are all related to a single topic. Almost every piece of writing you do that is longer than a few sentences should be organized into paragraphs."
        }
     ]
+    console.log("----datas--------------------",datas)
 
-    if (!description || description.length > 400) {
-      setError(true); // Show error if description is invalid
-      return;
-    }
 
-    const data = { description };
+      if (!cv_description || cv_description.length > 400) {
+        set_Cv_Error(true);
+        return;
+      }
 
-    try {
-      const response = await fetch("https://chatbotcv-t5h0c8cj.b4a.run/generate_cv", {
+      const data = { cv_description };
+
+    // try {
+      // const response = await fetch("https://chatbotcv-t5h0c8cj.b4a.run/generate_cv", {
+      const response = await fetch("http://127.0.0.1:8000/generate_cv", {
+
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data)(datas),
+        body: JSON.stringify(data),
       });
 
 
       if (!response.ok) {
         throw new Error("Failed to generate CV pointers");
       }
+      
+      console.log("----response--------------------",response)
 
-      const result = await response.text(); // Get raw text response
+      const result = await response.json();
+      // const result = await datas;
+      console.log("----result-  await-------------------",result)
 
       // Parse the response into a structured format
-      const parsedPointers = result.datas
-        .split("\n\n") // Split by double newlines to separate companies
-        .filter((block) => block.trim() !== "") // Remove empty blocks
-        .map((block) => {
-          const lines = block.split("\n").filter((line) => line.trim() !== ""); // Split by newlines and clean up
-          return {
-            companyName: lines[0]?.replace("Company name: ", "").trim(), // Extract company name
-            pointers: lines.slice(1).map((line) => line.replace(/^(\d+\.\s)/, "").trim()), // Extract pointers
-          };
-        });
+      // const parsedPointers = result
+      //   .split("\n\n") 
+      //   .filter((block) => block.trim() !== "") // Remove empty blocks
+      //   .map((block) => {
+      //     const lines = block.split("\n").filter((line) => line.trim() !== ""); // Split by newlines and clean up
+      //     return {
+      //       companyName: lines[0]?.replace("Company name: ", "").trim(), // Extract company name
+      //       pointers: lines.slice(1).map((line) => line.replace(/^(\d+\.\s)/, "").trim()), // Extract pointers
+      //     };
+      //   });
+
+      const parsedPointers = result.map((block) => {
+        const lines = block.work.split(".").filter((line) => line.trim() !== ""); // Split by periods and clean up
+        return {
+          companyName: block.companyName.trim(), // Extract company name
+          pointers: lines.map((line) => line.trim()), // Extract pointers
+        };
+      });
+
+
+      console.log("----parsedPointers--------------------",parsedPointers)
 
       setCvPointers(parsedPointers); // Update the state with parsed data
       // setError(false); // Reset error state
-    } catch (error) {
-      // console.error("Error:", error);
-      // setError(true); // Show error if API fails
-    }
+    // } 
+    // catch (error) {
+    //   // console.error("Error:", error);
+    //   // setError(true); // Show error if API fails
+    // }
   };
   const [startDate, setStartDate] = useState(""); // State for "From" input
   const [endDate, setEndDate] = useState(""); // State for "To" input
@@ -709,17 +750,27 @@ const  datas =[
   <textarea
     className="w-full h-24 p-3 rounded-lg bg-[#4F4B68]  text-white focus:outline-none font-bold mt-4"
     placeholder="Paste the Job Description"
-    value={description}
-    onChange={(e) => setDescription(e.target.value)}
+    value={cv_description}
+    onChange={(e) => set_cv_description(e.target.value)}
   ></textarea>
   <p className="text-right">Word Limit: 400</p>
   {/* {error && <p className="text-red-500 text-sm mt-2">Please ensure the description is under 400 characters.</p>} */}
   <div className="flex items-center justify-end space-x-4">
+
+    {/* Loading/Error States */}
+    {loading && <div className="text-white text-center mt-4">Loading...</div>}
+        {error && (
+          <div className="text-red-500 text-center mt-4">
+            Error fetching data...
+          </div>
+        )}
+
+
     <button
       className="bg-[#4F4B68] hover:bg-[#4F4B68] text-white font-bold py-2 px-4 rounded-full mt-4 w-[20%]"
       onClick={handleGenerateCvPointers}
     >
-      Generate CV
+      Generate CV.
     </button>
   </div>
   <div className="mt-6 bg-[#4F4B68]">
@@ -734,9 +785,11 @@ const  datas =[
           </ul>
         </div>
       ))
-    ) : (
-      <p className="text-gray-400">No CV pointers generated yet. Enter a description and click "Generate CV."</p>
-    )}
+    ) 
+    : (
+      <p className="text-gray-400"></p>
+    )
+    }
   </div>
 {/* </div> */}
       <button className=" bg-[#4F4B68] hover:bg-[#4F4B68] text-white font-bold py-2 px-4 rounded-full mt-6 w-[18%]">
