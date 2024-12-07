@@ -202,55 +202,7 @@
     }
   };
 
-  // //--------------------------------------Bulk upload RECORD data
-
-  // const [b_date,  set_b_date] = useState("");
-  // const [b_keywords,  set_b_keywords] = useState("");
-  // const [b_company_name,  set_b_company_name] = useState("");
-  // const [b_detail_description, set_b_detail_description] = useState("");
-
-
-  // const BulkRecordhandle = async () => {
-  //   const b_data = {
-  //     date: b_date,
-  //     company_name: b_keywords,
-  //     keyword: b_company_name,
-  //     detail_description: b_detail_description,
-  //   };
-  //   console.log('----BulkRecordhandle-----------DATA--------------------',b_data)
-  //   // try {
-  //     // const response = await fetch('https://chatbotcv-t5h0c8cj.b4a.run/record_entry', {
-  //     const response = await fetch('http://127.0.0.1:8000/record_entry/', {
-
-  // const handleGenerateCvPointers = async () => {
-  //   if (!description || description.length > 400) {
-  //     // setError(true);
-  //      // Show error if description is empty or exceeds word limit
-  //     return;
-  //   }
-    
-  //   const data = { description: description };
-
-  //   try {
-  //     const response = await fetch('https://chatbotcv-t5h0c8cj.b4a.run/generate_cv', {
-
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-
-  //       body: JSON.stringify(b_data),
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error('Failed to record entry');
-  //     }
-
-  //     const result = await response.json();
-  //   // } catch (error) {
-  //   //   console.error('Error:--------------', error);
-  //   // }
-  // };
+  
   const empty_data = [
     {
       date: "",
@@ -288,7 +240,7 @@ const BulkRecordhandle = async (index) => {
   
   // Post the data to the server
   try {
-    const response = await fetch('http://127.0.0.1:8000/record_entry/', {
+    const response = await fetch('https://chatbotcv-t5h0c8cj.b4a.run/record_entry', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -306,77 +258,6 @@ const BulkRecordhandle = async (index) => {
     console.error('Error:--------------', error);
   }
 };
-
-
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error('Failed to record entry');
-  //     }
-
-  //     const result = await response.json();
-  //   // } catch (error) {
-  //   //   console.error('Error:--------------', error);
-  //   // }
-  // };
-
-  const empty_data = [
-    {
-      date: "",
-      company_name: "",
-      keywords: "",
-      detail_description: "",
-    },]
-
-  // const [bulkData, setBulkData] = useState(empty_data); // Initialize state with the API data
-  console.log("+++++++++++------bulkData-----------------------",bulkData )
-  console.log("------apiData------0---------------",apiData)
-
-  if (!bulkData){
-    setApiData(empty_data); // Dynamically render based on API response
-
-    console.log("------apiData---------------------",apiData)
-    setBulkData(apiData)
-  }
-const handleInputChange = (index, field, value) => {
-  // Update the specific field for the record at index
-  const updatedBulkData = [...bulkData];
-  updatedBulkData[index][field] = value;
-  setBulkData(updatedBulkData);
-};
-
-const BulkRecordhandle = async (index) => {
-  const b_data = {
-    date: bulkData[index].date,
-    company_name: bulkData[index].company_name,
-    keyword: bulkData[index].keywords,
-    detail_description: bulkData[index].detail_description,
-  };
-  
-  console.log('----BulkRecordhandle-----------DATA--------------------', b_data);
-  
-  // Post the data to the server
-  try {
-    const response = await fetch('http://127.0.0.1:8000/record_entry/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(b_data),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to record entry');
-    }
-
-    const result = await response.json();
-    console.log('Response from server:', result);
-  } catch (error) {
-    console.error('Error:--------------', error);
-  }
-};
-
-
   const handleGenerateCvPointers = async () => {
     if (!description || description.length > 400) {
       setError(true); // Show error if description is invalid
@@ -419,7 +300,34 @@ const BulkRecordhandle = async (index) => {
       // setError(true); // Show error if API fails
     }
   };
-  
+  const handleappraisal = async () => {
+    setLoading(true);
+    setError(false);
+
+    try {
+      // API call
+      const response = await axios.get("https://chatbotcv-t5h0c8cj.b4a.run/generate_appraisal_report", {
+        params: {
+          keywords,
+          from_date: fromDate,
+          to_date: toDate,
+        },
+      });
+
+      // Update journal entries state
+      setJournalEntries(response.data || []);
+    } catch (err) {
+      // console.error("API Error:", err);
+
+      // Use dummy data as fallback
+      setError(true);
+      setJournalEntries(dummyData);
+    } finally {
+      setLoading(false);
+    }
+  };
+   
+    
   return (
     <div className="min-h-screen item-center bg-gradient-to-b from-[#131120] to-[#000080] text-white p-4">
       <div className="w-full max-w-8xl mx-auto bg-gradient-to-b from-[#504686] to-[#131120] text-white rounded-lg p-8 shadow-full mt-4">
@@ -885,7 +793,7 @@ const BulkRecordhandle = async (index) => {
           )} */} 
         {/* </div>
       </div> */}
- <div className="min-h-screen bg-[#4F4B68] mt-6 text-white p-6">
+ {/* <div className="min-h-screen bg-[#4F4B68] mt-6 text-white p-6"> */}
   <textarea
     className="w-full h-24 p-3 rounded-lg bg-[#4F4B68]  text-white focus:outline-none font-bold mt-4"
     placeholder="Paste the Job Description"
@@ -918,7 +826,7 @@ const BulkRecordhandle = async (index) => {
       <p className="text-gray-400">No CV pointers generated yet. Enter a description and click "Generate CV."</p>
     )}
   </div>
-</div>
+{/* </div> */}
       <button className=" bg-[#4F4B68] hover:bg-[#4F4B68] text-white font-bold py-2 px-4 rounded-full mt-6 w-[18%]">
         Generate Appraisal Report
       </button>
@@ -984,6 +892,6 @@ const BulkRecordhandle = async (index) => {
     </div>
     
   );
- }
+ 
 
-
+}
