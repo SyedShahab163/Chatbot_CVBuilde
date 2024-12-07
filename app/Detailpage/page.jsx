@@ -30,7 +30,9 @@
     }
 
     try {
-      const response = await fetch("https://chatbotcv-t5h0c8cj.b4a.run/entry_to_gpt", {
+      // const response = await fetch("https://chatbotcv-t5h0c8cj.b4a.run/entry_to_gpt", {
+      const response = await fetch('http://127.0.0.1:8000/entry_to_gpt', {   
+  
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -89,8 +91,8 @@
     console.log("-------formData-----------------------",formData)
 
     // try {
-      const response = await fetch('https://chatbotcv-t5h0c8cj.b4a.run/upload_pdf', { //
-        // const response = await fetch('http://127.0.0.1:8000/upload_pdf', {   
+      // const response = await fetch('https://chatbotcv-t5h0c8cj.b4a.run/upload_pdf', { //
+        const response = await fetch('http://127.0.0.1:8000/upload_pdf', {   
         method: 'POST',
         body: formData,
       });
@@ -171,17 +173,23 @@
     } finally {
       setLoading(false);
     }
+
+
+  // -----------------------------------------------------------------RECORD entry  
+
   };
     const handleRecordClick = async () => {
     const data = {
-      date: '2024-01-01',
-      company_name: 'my_company',
-      keyword: 'It_job',
+      date: date,
+      company_name: company_name,
+      keyword: keyword,
       detail_description: detailDescription,
     };
+    console.log("-------entry record-----------------data---------------------------",data)
 
     try {
       const response = await fetch('https://chatbotcv-t5h0c8cj.b4a.run/record_entry', {
+        // const response = await fetch('http://127.0.0.1:8000/record_entry', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -194,6 +202,7 @@
       }
 
       const result = await response.json();
+      console.log("-------entry record-------------api----result---------------------------",result)
       //console.log('Success:', result);
       // Optionally, show a success message or handle the response
     } catch (error) {
@@ -228,6 +237,7 @@ const handleInputChange = (index, field, value) => {
   setBulkData(updatedBulkData);
 };
 
+// -----------------------------------------------------------bulk record-------------------------------
 const BulkRecordhandle = async (index) => {
   const b_data = {
     date: bulkData[index].date,
