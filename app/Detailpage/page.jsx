@@ -259,6 +259,16 @@ const BulkRecordhandle = async (index) => {
   }
 };
   const handleGenerateCvPointers = async () => {
+
+const  datas =[
+      {
+      company_name:"ABC",
+       work1: "A paragraph is a series of sentences that are organized and coherent, and are all related to a single topic. Almost every piece of writing you do that is longer than a few sentences should be organized into paragraphs."},
+       {
+      work2:"A paragraph is a series of sentences that are organized and coherent, and are all related to a single topic. Almost every piece of writing you do that is longer than a few sentences should be organized into paragraphs."
+       }
+    ]
+
     if (!description || description.length > 400) {
       setError(true); // Show error if description is invalid
       return;
@@ -272,8 +282,9 @@ const BulkRecordhandle = async (index) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)(datas),
       });
+
 
       if (!response.ok) {
         throw new Error("Failed to generate CV pointers");
@@ -282,7 +293,7 @@ const BulkRecordhandle = async (index) => {
       const result = await response.text(); // Get raw text response
 
       // Parse the response into a structured format
-      const parsedPointers = result
+      const parsedPointers = result.datas
         .split("\n\n") // Split by double newlines to separate companies
         .filter((block) => block.trim() !== "") // Remove empty blocks
         .map((block) => {
