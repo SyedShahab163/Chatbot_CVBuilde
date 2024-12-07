@@ -874,7 +874,7 @@ const BulkRecordhandle = async (index) => {
 
       {/* Show/Hide Dummy Data */}
       {showData && (
-        <div className="bg-[#4F4B68] h-20 p-4 mb-6">
+        <div className="bg-[#4F4B68] h-20 p-4 mb-6 rounded-lg">
           {dummyDatas.map((entry, index) => (
             <div key={index}>
               <h4 className="text-xl font-bold">
