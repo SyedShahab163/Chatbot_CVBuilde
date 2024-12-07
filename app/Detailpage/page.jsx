@@ -138,13 +138,13 @@
       company_name: "Company 1",
       keywords: "Test Keyword 1",
       detail_description: "This is a dummy description for testing purposes.",
-    }
-    // {
-    //   date: "2025-01-01",
-    //   company_name: "Dummy Company 2",
-    //   keywords: "Test Keyword 2",
-    //   detail_description: "Another dummy description for testing.",
-    // },
+    },
+    {
+      date: "2025-01-01",
+      company_name: "Dummy Company 2",
+      keywords: "Test Keyword 2",
+      detail_description: "Another dummy description for testing.",
+    },
   ];
 
   // Function to handle API request
@@ -270,57 +270,71 @@ const BulkRecordhandle = async (index) => {
 };
   const handleGenerateCvPointers = async () => {
 
-const  datas =[
+    const datas = [
       {
-      company_name:"ABC",
-       work1: "A paragraph is a series of sentences that are organized and coherent, and are all related to a single topic. Almost every piece of writing you do that is longer than a few sentences should be organized into paragraphs."},
-       {
-      work2:"A paragraph is a series of sentences that are organized and coherent, and are all related to a single topic. Almost every piece of writing you do that is longer than a few sentences should be organized into paragraphs."
-       }
-    ]
+        company_name: "ABC",
+        work1: "A paragraph is a series of sentences that are organized and coherent, and are all related to a single topic. Almost every piece of writing you do that is longer than a few sentences should be organized into paragraphs.",
+      },
+      {
+        company_name: "XYZ",
+        work2: "Another paragraph example to ensure things are organized properly and aligned well in the layout.",
+      },
+    ];
 
-    if (!description || description.length > 400) {
-      setError(true); // Show error if description is invalid
-      return;
-    }
+    // if (!description || description.length > 400) {
+    //   setError(true); // Show error if description is invalid
+    //   return;
+    // }
 
-    const data = { description };
-
+    // const data = { description };
     try {
-      const response = await fetch("https://chatbotcv-t5h0c8cj.b4a.run/generate_cv", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data)(datas),
-      });
+      setCvPointers(datas); // Directly set the hardcoded data to the state
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+  
+    // try {
+    //   setCvPointers(datas);
+      // const response = await fetch("https://chatbotcv-t5h0c8cj.b4a.run/generate_cv", {
+      //   method: "POST",
+      //   headers: {
+      //      "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(data),
+      // });
+       
 
+      // if (!response.ok) {
+      //   throw new Error("Failed to generate CV pointers");
+      // }
 
-      if (!response.ok) {
-        throw new Error("Failed to generate CV pointers");
-      }
-
-      const result = await response.text(); // Get raw text response
+      // const result = await response.text(); // Get raw text response
+    //  const result = datas
+    //   console.log(datas)
 
       // Parse the response into a structured format
-      const parsedPointers = result.datas
-        .split("\n\n") // Split by double newlines to separate companies
-        .filter((block) => block.trim() !== "") // Remove empty blocks
-        .map((block) => {
-          const lines = block.split("\n").filter((line) => line.trim() !== ""); // Split by newlines and clean up
-          return {
-            companyName: lines[0]?.replace("Company name: ", "").trim(), // Extract company name
-            pointers: lines.slice(1).map((line) => line.replace(/^(\d+\.\s)/, "").trim()), // Extract pointers
-          };
-        });
+      // const parsedPointers = result
+        // .split("\n\n") // Split by double newlines to separate companies
+        // .filter((block) => block.trim() !== "") // Remove empty blocks
+        // .map((block) => {
+        //   const lines = block.split("\n").filter((line) => line.trim() !== ""); // Split by newlines and clean up
+        //   return {
+        //     companyName: lines[0]?.replace("Company name: ", "").trim(), // Extract company name
+        //     pointers: lines.slice(1).map((line) => line.replace(/^(\d+\.\s)/, "").trim()), // Extract pointers
+          
+        //   };
+        // });
 
-      setCvPointers(parsedPointers); // Update the state with parsed data
+      // setCvPointers(parsedPointers); 
+      // setCvPointers(datas); 
       // setError(false); // Reset error state
-    } catch (error) {
+    // } catch (error) {
+    //    setCvPointers(datas)
       // console.error("Error:", error);
       // setError(true); // Show error if API fails
-    }
-  };
+  //   }
+  // };
   const [startDate, setStartDate] = useState(""); // State for "From" input
   const [endDate, setEndDate] = useState(""); // State for "To" input
 
@@ -329,13 +343,13 @@ const  datas =[
     {
       month: 1, // January
       year: 2024,
-      details: [5, 20], // Numerical details: e.g., completed projects, revenue growth percentage
+      
     },
-    {
-      month: 2, // February
-      year: 2024,
-      details: [8, 25], // Numerical details
-    },
+    // {
+    //   month: 2, // February
+    //   year: 2024,
+    //    // Numerical details
+    // },
   ]);
 
   const [isLoading, setIsLoading] = useState(false); // Loading state
@@ -347,7 +361,7 @@ const  datas =[
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/generate_appraisal_report",
+        "https://chatbotcv-t5h0c8cj.b4a.run/generate_appraisal_report",
         {
           from_date: startDate,
           to_date: endDate,
@@ -447,7 +461,7 @@ const  datas =[
         {/* Additional Inputs */} 
         {/* -------------------------------GPT-ENTITY-------------------------------------------------------------------------------------------- */}
 
-<div className=" relative mt-6 item-center justify-center text-center mb-4 p-4">
+   <div className=" relative mt-6 item-center justify-center text-center mb-4 p-4">
   {/* Inputs */}
   <div className="flex gap-30 mb-4 p-6">
     <input
@@ -729,17 +743,18 @@ const  datas =[
       className="bg-[#4F4B68] hover:bg-[#4F4B68] text-white font-bold py-2 px-4 rounded-full mt-4 w-[20%]"
       onClick={handleGenerateCvPointers}
     >
+
       Generate CV
     </button>
   </div>
-  <div className="mt-6 bg-[#4F4B68]">
+  {/* <div className="mt-6 bg-[#4F4B68]">
     {cvPointers.length > 0 ? (
       cvPointers.map((company, index) => (
         <div key={index} className="mb-6">
           <h3 className="font-semibold text-lg">Company Name: {company.companyName}</h3>
           <ul className="list-disc pl-6 mt-2">
             {company.pointers.map((pointer, i) => (
-              <li key={i}>{pointer}</li>
+              <li key={i}>{pointer.datas}</li>
             ))}
           </ul>
         </div>
@@ -747,7 +762,44 @@ const  datas =[
     ) : (
       <p className="text-gray-400">No CV pointers generated yet. Enter a description and click "Generate CV."</p>
     )}
-  </div>
+  </div> */}
+ <textarea
+      className="w-full h-24 p-3 rounded-lg bg-[#4F4B68] text-white focus:outline-none font-bold mt-4"
+      placeholder="Paste the Job Description"
+      value={description}
+      onChange={(e) => setDescription(e.target.value)}
+    ></textarea>
+    <p className="text-right">Word Limit: 400</p>
+
+    <div className="flex items-center justify-end space-x-4">
+      <button
+        className="bg-[#4F4B68] hover:bg-[#4F4B68] text-white font-bold py-2 px-4 rounded-full mt-4 w-[20%]"
+        onClick={handleGenerateCvPointers}
+      >
+        Generate CV
+      </button>
+    </div>
+
+    <div className="mt-6 bg-[#4F4B68] p-4 rounded-lg text-white">
+      {cvPointers.length > 0 ? (
+        cvPointers.map((company, index) => (
+          <div key={index} className="mb-6">
+            <h3 className="font-semibold text-lg">
+              Company Name: {company.company_name || "N/A"}
+            </h3>
+            <ul className="list-disc pl-6 mt-2">
+              {Object.keys(company)
+                .filter((key) => key.startsWith("work"))
+                .map((key, i) => (
+                  <li key={i}>{company[key]}</li>
+                ))}
+            </ul>
+          </div>
+        ))
+      ) : (
+        <p className="text-gray-400">No CV pointers generated yet. Enter a description and click "Generate CV."</p>
+      )}
+    </div>
 {/* </div> */}
       <button className=" bg-[#4F4B68] hover:bg-[#4F4B68] text-white font-bold py-2 px-4 rounded-full mt-6 w-[18%]">
         Generate Appraisal Report
@@ -755,7 +807,7 @@ const  datas =[
 
  {/* <div className="p-6 bg-[#131120] min-h-screen text-white"> */}
       {/* Date Range Input Section */}
-      <div className="flex items-center justify-between space-x-2 mb-6">
+      {/* <div className="flex items-center justify-between space-x-2 mb-6">
         <div className="flex flex-col">
           <span>From</span>
           <input
@@ -783,7 +835,37 @@ const  datas =[
       >
         {isLoading ? "Generating..." : "Generate Report"}
       </button>
-      </div>
+      </div> */}
+<div className="flex items-center justify-between space-x-2 mb-6 flex-row mt-6">
+<span>From</span>
+  <div className="flex flex-col">
+    <input
+      type="text"
+      placeholder="From: YY-MM-DD"
+      value={startDate}
+      onChange={(e) => setStartDate(e.target.value)}
+      className="bg-[#4F4B68] text-white rounded-lg py-3 px-4 focus:outline-none"
+    />
+  </div>
+  <span>To</span>
+  <div className="flex flex-col">
+    
+    <input
+      type="text"
+      placeholder="To: YY-MM-DD"
+      value={endDate}
+      onChange={(e) => setEndDate(e.target.value)}
+      className="bg-[#4F4B68] text-white rounded-lg py-3 px-4 focus:outline-none"
+    />
+  </div>
+  <button
+    onClick={handleAppraisal}
+    className="bg-[#4F4B68] hover:bg-[#6B6584] text-white font-bold py-3 px-6 rounded-lg"
+    disabled={isLoading}
+  >
+    {isLoading ? "Generating..." : "Generate Report"}
+  </button>
+</div>
 
       {/* Generate Button */}
       
@@ -796,29 +878,28 @@ const  datas =[
       )}
 
       {/* Journal Entries Section */}
-      <div className="space-y-6">
+      {/* <div className=""> */}
+<div className="bg-[#4F4B68] p-4 rounded-lg shadow-lg mb-4 text-xl font-bold">Month/Year
         {appraisalData.length > 0 ? (
           appraisalData.map((entry, index) => (
+            
             <div
               key={index}
-              className="bg-[#4F4B68] p-4 rounded-lg shadow-lg mb-4"
+              // className=""
             >
-              <div className="text-center font-semibold text-lg">
-                Month: {entry.month}, Year: {entry.year}
-              </div>
-              <ul className="list-disc pl-6">
-                <li>Total Projects Completed: {entry.details[0]}</li>
-                <li>Revenue Growth (%): {entry.details[1]}</li>
-              </ul>
+              {/* <h1 className="text-2xl font-bold">Month/Year</h1> */}
+              {/* <div className="text-center font-semibold text-lg"> */}
+              
+                <h4 className="text-2xl font-bold">{entry.month}/{entry.year}</h4> 
+                {/* <li> {entry.details[0]}</li>
+                <li>(%): {entry.details[1]}</li> */}
+            {/* </ul> */}
             </div>
           ))
-        ) : (
-          <div className="text-gray-400">No data available. Please generate a report.</div>
+        ) : (  
+           <div className="text-gray-400">No data available. Please generate a report.</div>
         )}
-      </div>
-    {/* </div> */}
-    {/* </div> */}
-    
+        </div>
     <div className="flex items-center justify-end space-x-4">
     <button
       className="bg-[#4F4B68] hover:bg-[#4F4B68] text-white font-bold py-2 px-4 rounded-full mt-4 w-[20%]"
