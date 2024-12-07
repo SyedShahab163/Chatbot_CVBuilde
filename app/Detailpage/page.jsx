@@ -890,7 +890,7 @@ const BulkRecordhandle = async (index) => {
               {/* <h1 className="text-2xl font-bold">Month/Year</h1> */}
               {/* <div className="text-center font-semibold text-lg"> */}
               
-                <h4 className="text-2xl font-bold">{entry.month}/{entry.year}</h4> 
+                <h4 className="text-xl font-bold">{entry.month}/{entry.year}</h4> 
                 {/* <li> {entry.details[0]}</li>
                 <li>(%): {entry.details[1]}</li> */}
             {/* </ul> */}
