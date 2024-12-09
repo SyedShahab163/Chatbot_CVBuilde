@@ -1,10 +1,15 @@
  "use client";
  import { useState } from "react";
+ import { useRef } from 'react';
  import Link from 'next/link';
  import axios from "axios";
  export default function DetailPage() {
   const [selectedType, setSelectedType] = useState(""); // To store selected type
-  const [description, setDescription] = useState(""); // To store description
+  const [description, setDescription] = useState(""); // To cv generatestore description
+
+  const [cv_description, set_cv_description] = useState(""); // To cv generatestore description
+  const [cv_error, set_Cv_Error] = useState(false);
+
 
   const [apiResponse, setApiResponse] = useState(""); // To store API response
   const [selectedFile, setSelectedFile] = useState(null);
@@ -23,6 +28,8 @@
   const [name ,setname] = useState()
 
   const [bulkData, setBulkData] = useState([]); // Initialize state with the API data
+  const cvRef = useRef(null);
+  const viewJourRef = useRef(null);
 
   const handleSubmit = async () => {
     if (!selectedType || !description) {
@@ -46,7 +53,7 @@
         console.log("---data_gpt---------------------", data_gpt);
         console.log("---data_gpt.date---------------------", data_gpt.date);
         console.log("---data_gpt.company_name---------------------", data_gpt.company_name);
-        setApiResponse(`Success: ${JSON.stringify(data_gpt)}`);
+        // setApiResponse(`Success: ${JSON.stringify(data_gpt)}`);
 
         // Update state variables with the data from the API response
         setdate(data_gpt.date || '');
@@ -251,7 +258,9 @@ const BulkRecordhandle = async (index) => {
   
   // Post the data to the server
   try {
-    const response = await fetch('https://chatbotcv-t5h0c8cj.b4a.run/record_entry', {
+    // const response = await fetch('https://chatbotcv-t5h0c8cj.b4a.run/record_entry', {
+    const response = await fetch('http://127.0.0.1:8000/record_entry', {
+
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -273,71 +282,88 @@ const BulkRecordhandle = async (index) => {
 
     const datas = [
       {
-        company_name: "ABC",
-        work1: "A paragraph is a series of sentences that are organized and coherent, and are all related to a single topic. Almost every piece of writing you do that is longer than a few sentences should be organized into paragraphs.",
-      },
-      {
-        company_name: "XYZ",
-        work2: "Another paragraph example to ensure things are organized properly and aligned well in the layout.",
-      },
-    ];
-
-    // if (!description || description.length > 400) {
-    //   setError(true); // Show error if description is invalid
-    //   return;
-    // }
-
-    // const data = { description };
-    try {
-      setCvPointers(datas); // Directly set the hardcoded data to the state
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }
-  
-    // try {
-    //   setCvPointers(datas);
-      // const response = await fetch("https://chatbotcv-t5h0c8cj.b4a.run/generate_cv", {
-      //   method: "POST",
-      //   headers: {
-      //      "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(data),
-      // });
+        companyName:"ABC",
+       work: "A paragraph is a series of sentences that are organized and coherent,",
        
+      work:"are all related to a single topic. Almost every piece of writing you do that is longer than a few sentences should be organized into paragraphs."
+       },
+
+       {
+        companyName:"XYZ",
+       work: "A paragraph is a series of sentences that are organized and coherent,",
+       
+      work:"are all related to a single topic. Almost every piece of writing you do that is longer than a few sentences should be organized into paragraphs."
+       }
+    ]
+    console.log("----datas--------------------",datas)
+
+
+      if (!cv_description || cv_description.length > 400) {
+        set_Cv_Error(true);
+        return;
+      }
+
+      const data = { cv_description };
+
+    // try {
+      // const response = await fetch("https://chatbotcv-t5h0c8cj.b4a.run/generate_cv", {
+      const response = await fetch("http://127.0.0.1:8000/generate_cv", {
+
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
       // if (!response.ok) {
       //   throw new Error("Failed to generate CV pointers");
       // }
 
-      // const result = await response.text(); // Get raw text response
-    //  const result = datas
-    //   console.log(datas)
+      if (!response.ok) {
+        throw new Error("Failed to generate CV pointers");
+      }
+      
+      console.log("----response--------------------",response)
+
+      const result = await response.json();
+      // const result = await datas;
+      console.log("----result-  await-------------------",result)
 
       // Parse the response into a structured format
       // const parsedPointers = result
-        // .split("\n\n") // Split by double newlines to separate companies
-        // .filter((block) => block.trim() !== "") // Remove empty blocks
-        // .map((block) => {
-        //   const lines = block.split("\n").filter((line) => line.trim() !== ""); // Split by newlines and clean up
-        //   return {
-        //     companyName: lines[0]?.replace("Company name: ", "").trim(), // Extract company name
-        //     pointers: lines.slice(1).map((line) => line.replace(/^(\d+\.\s)/, "").trim()), // Extract pointers
-          
-        //   };
-        // });
+      //   .split("\n\n") 
+      //   .filter((block) => block.trim() !== "") // Remove empty blocks
+      //   .map((block) => {
+      //     const lines = block.split("\n").filter((line) => line.trim() !== ""); // Split by newlines and clean up
+      //     return {
+      //       companyName: lines[0]?.replace("Company name: ", "").trim(), // Extract company name
+      //       pointers: lines.slice(1).map((line) => line.replace(/^(\d+\.\s)/, "").trim()), // Extract pointers
+      //     };
+      //   });
 
-      // setCvPointers(parsedPointers); 
+      const parsedPointers = result.map((block) => {
+        const lines = block.work.split(".").filter((line) => line.trim() !== ""); // Split by periods and clean up
+        return {
+          companyName: block.companyName.trim(), // Extract company name
+          pointers: lines.map((line) => line.trim()), // Extract pointers
+        };
+      });
+
+
+      console.log("----parsedPointers--------------------",parsedPointers)
+
+      setCvPointers(parsedPointers); 
       // setCvPointers(datas); 
       // setError(false); // Reset error state
-    // } catch (error) {
-    //    setCvPointers(datas)
-      // console.error("Error:", error);
-      // setError(true); // Show error if API fails
-  //   }
-  // };
-  // const [startDate, setStartDate] = useState(""); // State for "From" input
-  // const [endDate, setEndDate] = useState(""); // State for "To" input
+    // } 
+    // catch (error) {
+    //   // console.error("Error:", error);
+    //   // setError(true); // Show error if API fails
+    // }
+  };
+  const [startDate, setStartDate] = useState(""); // State for "From" input
+  const [endDate, setEndDate] = useState(""); // State for "To" input
 
   // // Initialize with hardcoded numerical data
   // const [appraisalData, setAppraisalData] = useState([
@@ -396,6 +422,26 @@ const BulkRecordhandle = async (index) => {
   //   },
   // ];
 
+  const handleAppraisal = () => {
+    setShowData(prevState => !prevState); // Toggle data visibility on button click
+  };
+
+
+  //-------------------------------scroll BTNs----------------------------------
+
+  const handleGenerateCVClick = () => {
+    if (cvRef.current) {
+      cvRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleViewJournal = () => {
+    if (viewJourRef.current) {
+      viewJourRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+    
   // const handleAppraisal = () => {
   //   setShowData(prevState => !prevState); // Toggle data visibility on button click
   // };
@@ -431,10 +477,10 @@ const BulkRecordhandle = async (index) => {
           {/* Navigation Links */}
           <nav className="absolute top-4 right-4 flex gap-6 text-sm text-xl font-inika">
             <a href="#" className="hover:underline">{name}</a>
-            <a href="#" className="hover:underline">Logout</a>
+            <a href="/" className="hover:underline">Logout</a>
             <a href="#" className="hover:underline">Create New Entry</a>
-            <a href="#" className="hover:underline">View Journal</a>
-            <a href="#" className="hover:underline">Generate CV</a>
+            <a className="hover:underline" onClick={handleGenerateCVClick} >View Journal</a>
+            <a className="hover:underline" onClick={handleViewJournal} >Generate CV</a>
           </nav>
         {/* </div> */}
         
@@ -512,7 +558,7 @@ const BulkRecordhandle = async (index) => {
     <input
       type="text"
       placeholder="Keyword"
-      value={keywords}
+      value={keyword}
       onChange={(e) => setkeyword(e.target.value)}
       className="w-1/2 bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
     />
@@ -653,7 +699,7 @@ const BulkRecordhandle = async (index) => {
       </div>
       
       </div>
-      <div className=" item-left text-left w-full p-8 rounded-lg shadow-lg"> 
+      <div className=" item-left text-left w-full p-8 rounded-lg shadow-lg" ref={viewJourRef}>  
         <button
           onClick={fetchJournalEntrieshandle}
           className="text-xl text-center font-bold py-2  bg-[#4F4B68] rounded-full inline-block w-[12%]"
@@ -751,7 +797,7 @@ const BulkRecordhandle = async (index) => {
         </div>
       </div>
 
-      <div className="w-full p-6 rounded-lg shadow-lg"> 
+      <div className="w-full p-6 rounded-lg shadow-lg" ref={cvRef}> 
       <h1 className="  justify-left items-left text-xl text-center mt-2 font-bold py-2 bg-[#4F4B68]  rounded-full inline-block w-[12%]">
       Generate CV 
           </h1>    
@@ -759,41 +805,50 @@ const BulkRecordhandle = async (index) => {
   <textarea
     className="w-full h-24 p-3 rounded-lg bg-[#4F4B68]  text-white focus:outline-none font-bold mt-4"
     placeholder="Paste the Job Description"
-    value={description}
-    onChange={(e) => setDescription(e.target.value)}
+    value={cv_description}
+    onChange={(e) => set_cv_description(e.target.value)}
   ></textarea>
   <p className="text-right">Word Limit: 400</p>
   {/* {error && <p className="text-red-500 text-sm mt-2">Please ensure the description is under 400 characters.</p>} */}
   <div className="flex items-center justify-end space-x-4">
+
+    {/* Loading/Error States */}
+    {loading && <div className="text-white text-center mt-4">Loading...</div>}
+        {error && (
+          <div className="text-red-500 text-center mt-4">
+            Error fetching data...
+          </div>
+        )}
+
+
     <button
       className="bg-[#4F4B68] hover:bg-[#4F4B68] text-white font-bold py-2 px-4 rounded-full mt-4 w-[20%]"
       onClick={handleGenerateCvPointers}
     >
-
-      Generate CV
+      Generate CV.
     </button>
-  </div>
-  
-
-    <div className="mt-6 bg-[#4F4B68] p-4 rounded-lg text-white">
-      {cvPointers.length > 0 ? (
-        cvPointers.map((company, index) => (
-          <div key={index} className="mb-6">
-            <h3 className="font-semibold text-lg">
-              Company Name: {company.company_name || "N/A"}
-            </h3>
-            <ul className="list-disc pl-6 mt-2">
-              {Object.keys(company)
-                .filter((key) => key.startsWith("work"))
-                .map((key, i) => (
-                  <li key={i}>{company[key]}</li>
-                ))}
-            </ul>
-          </div>
-        ))
-      ) : (
-        <p className="text-gray-400">No CV pointers generated yet. Enter a description and click "Generate CV."</p>
-      )}
+ 
+    </div>
+  <div className="mt-6 bg-[#4F4B68]">
+    {cvPointers.length > 0 ? (
+      cvPointers.map((company, index) => (
+        <div key={index} className="mb-6">
+          <h3 className="font-semibold text-lg">Company Name: {company.companyName}</h3>
+          <ul className="list-disc pl-6 mt-2">
+            {company.pointers.map((pointer, i) => (
+              <li key={i}>{pointer}</li>
+            ))}
+          </ul>
+        </div>
+      ))
+    ) 
+    : (
+      <p className="text-gray-400"></p>
+    )
+    }
+   
+   
+       
     </div>
 {/* </div> */}
       <button className=" bg-[#4F4B68] hover:bg-[#4F4B68] text-white font-bold py-2 px-4 rounded-full mt-6 w-[18%]">
