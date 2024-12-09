@@ -30,8 +30,9 @@ export default function SignupPage() {0
                 }
             }
             );
-            console.log("Signup success", response.data);
-            window.location.href = "/Detailpage";
+            console.log("Signup success-------------------------------", response.data);
+            if (response.ok) {
+              window.location.href = "/login";}
             
         } catch (error) {
             console.log("Signup failed", error.message);
@@ -43,6 +44,7 @@ export default function SignupPage() {0
     }
 
     useEffect(() => {
+      
         if(user.email.length > 0 && user.password.length > 0 && user.username.length > 0) {
             setButtonDisabled(false);
         } else {
@@ -145,11 +147,12 @@ export default function SignupPage() {0
          
                      <button
                     type="onSignup"
-                    onClick={onSignup}
-                    className="w-full bg-blue-700 text-white py-2 rounded hover:bg-blue-800 transition"
-                   >
+                    onClick={onSignup} disabled={buttonDisabled || loading}
+                    className={`w-full bg-blue-700 text-white py-2 rounded hover:bg-blue-800 transition ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      {loading ? 'Signing up...' : 'Sign Up'}
                     {/* <Link href={"/login"}/> */}
-                    Sign Up
+                    {/* Sign Up */}
                    </button>    
                    {/* <button */}
 

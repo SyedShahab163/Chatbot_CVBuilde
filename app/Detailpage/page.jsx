@@ -23,6 +23,7 @@
 
   // const [Description, setDescription] = useState('');
   const [cvPointers, setCvPointers] = useState([]);
+  const [report, setreport] = useState([]);
   const [errors, setErrors] = useState(false);
   const [name ,setname] = useState()
 
@@ -52,7 +53,7 @@
         console.log("---data_gpt---------------------", data_gpt);
         console.log("---data_gpt.date---------------------", data_gpt.date);
         console.log("---data_gpt.company_name---------------------", data_gpt.company_name);
-        setApiResponse(`Success: ${JSON.stringify(data_gpt)}`);
+        // setApiResponse(`Success: ${JSON.stringify(data_gpt)}`);
 
         // Update state variables with the data from the API response
         setdate(data_gpt.date || '');
@@ -257,7 +258,9 @@ const BulkRecordhandle = async (index) => {
   
   // Post the data to the server
   try {
-    const response = await fetch('https://chatbotcv-t5h0c8cj.b4a.run/record_entry', {
+    // const response = await fetch('https://chatbotcv-t5h0c8cj.b4a.run/record_entry', {
+    const response = await fetch('http://127.0.0.1:8000/record_entry', {
+
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -408,16 +411,16 @@ const BulkRecordhandle = async (index) => {
   // };
   const [showData, setShowData] = useState(false);
 
-  const dummyDatas = [
-    {
-      month: 1,
-      year: 2024,
-    },
-    {
-      month: 2,
-      year: 2024,
-    },
-  ];
+  // const dummyDatas = [
+  //   {
+  //     month: 1,
+  //     year: 2024,
+  //   },
+  //   {
+  //     month: 2,
+  //     year: 2024,
+  //   },
+  // ];
 
   const handleAppraisal = () => {
     setShowData(prevState => !prevState); // Toggle data visibility on button click
@@ -439,6 +442,25 @@ const BulkRecordhandle = async (index) => {
   };
 
     
+  // const handleAppraisal = () => {
+  //   setShowData(prevState => !prevState); // Toggle data visibility on button click
+  // };
+
+
+  const GenerateAppraisalPointer = async () => {
+    const reportData = [
+      { month: "01", year: "2024", work1: "Completed project A", work2: "Led team meeting" },
+      { month: "02", year: "2024", work2: "Started a new role",work1: "Developed feature B"  },
+  
+    ];
+
+    try {
+      setreport(reportData); // Set the hardcoded data to state
+    } catch (error) {
+ 
+    }
+  };
+
   return (
     <div className="min-h-screen item-center bg-gradient-to-b from-[#131120] to-[#000080] text-white p-4">
       <div className="w-full max-w-8xl mx-auto bg-gradient-to-b from-[#504686] to-[#131120] text-white rounded-lg p-8 shadow-full mt-4">
@@ -455,7 +477,7 @@ const BulkRecordhandle = async (index) => {
           {/* Navigation Links */}
           <nav className="absolute top-4 right-4 flex gap-6 text-sm text-xl font-inika">
             <a href="#" className="hover:underline">{name}</a>
-            <a href="#" className="hover:underline">Logout</a>
+            <a href="/" className="hover:underline">Logout</a>
             <a href="#" className="hover:underline">Create New Entry</a>
             <a className="hover:underline" onClick={handleGenerateCVClick} >View Journal</a>
             <a className="hover:underline" onClick={handleViewJournal} >Generate CV</a>
@@ -536,7 +558,7 @@ const BulkRecordhandle = async (index) => {
     <input
       type="text"
       placeholder="Keyword"
-      value={keywords}
+      value={keyword}
       onChange={(e) => setkeyword(e.target.value)}
       className="w-1/2 bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
     />
@@ -914,27 +936,56 @@ const BulkRecordhandle = async (index) => {
           />
         </div>
         <button
-          onClick={handleAppraisal}
+          onClick={GenerateAppraisalPointer}
           className="bg-[#4F4B68] hover:bg-[#6B6584] text-white font-bold py-3 px-6 rounded-lg"
         >
           Generate Report
         </button>
       </div>
-
-      {/* Show/Hide Dummy Data */}
-      {showData && (
-        <div className="bg-[#4F4B68] h-20 p-4 mb-6 rounded-lg">
-          {dummyDatas.map((entry, index) => (
-            <div key={index}>
-              <h4 className="text-xl font-bold">
-                {entry.month}/{entry.year}
-              </h4>
-            </div>
-          ))}
-        </div>
+    {/* <div className="mt-6 bg-[#4F4B68] p-4 rounded-lg text-white">
+      {report.length > 0 ? (
+        report.map((entry, index) => (
+          <div key={index} className="mb-6">
+            <h3 className="font-semibold text-lg">
+            {entry.month}/{entry.year}
+            </h3>
+            <ul className="list-disc pl-6 mt-2">
+              {Object.keys(entry)
+                .filter((key) => key.startsWith("work"))
+                .map((key, i) => (
+                  <li key={i}>{entry[key]}</li>
+                ))}
+            </ul>
+          </div>
+        ))
+      ) : (
+        <p className="text-gray-400">No CV pointers generated yet. Enter a description and click "Generate CV."</p>
       )}
+    </div> */}
+   <div className="mt-6 bg-[#4F4B68] p-4 rounded-lg text-white">
+        {report.length > 0 ? (
+          report.map((entry, index) => (
+            <div key={index} className="mb-6">
+              <h3 className="font-semibold text-lg">
+                {entry.month}/{entry.year}
+              </h3>
+              <ul className="list-disc pl-6 mt-2">
+                {Object.keys(entry)
+                  .filter((key) => key.startsWith("work")) // Only include "work"-prefixed keys
+                  .map((key, i) => (
+                    <li key={i}>{entry[key]}</li>
+                  ))}
+              </ul>
+            </div>
+          ))
+        ) : (
+          <p className="text-gray-400">"
+          </p>
+        )}
+      </div>
+
     </div>
-      
+  
     <div className="flex items-center justify-end space-x-4">
     <button
       className="bg-[#4F4B68] hover:bg-[#4F4B68] text-white font-bold py-2 px-4 rounded-full mt-4 w-[20%]"
