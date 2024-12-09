@@ -155,7 +155,7 @@
   ];
 
   // Function to handle API request
-  const fetchJournalEntries = async () => {
+  const fetchJournalEntrieshandle = async () => {
     setLoading(true);
     setError(false);
 
@@ -362,49 +362,65 @@ const BulkRecordhandle = async (index) => {
   const [startDate, setStartDate] = useState(""); // State for "From" input
   const [endDate, setEndDate] = useState(""); // State for "To" input
 
-  // Initialize with hardcoded numerical data
-  const [appraisalData, setAppraisalData] = useState([
-    {
-      month: 1, // January
-      year: 2024,
+  // // Initialize with hardcoded numerical data
+  // const [appraisalData, setAppraisalData] = useState([
+  //   {
+  //     month: 1, // January
+  //     year: 2024,
       
+  //   },
+  //   // {
+  //   //   month: 2, // February
+  //   //   year: 2024,
+  //   //    // Numerical details
+  //   // },
+  // ]);
+
+  // const [isLoading, setIsLoading] = useState(false); // Loading state
+  // const [hasError, setHasError] = useState(false); // Error state
+
+  // const handleAppraisal = async () => {
+  //   setIsLoading(true);
+  //   setHasError(false);
+
+  //   try {
+  //     const response = await axios.post(
+  //       "https://chatbotcv-t5h0c8cj.b4a.run/generate_appraisal_report",
+  //       {
+  //         from_date: startDate,
+  //         to_date: endDate,
+  //       },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+
+  //     // Update state with API response
+  //     setAppraisalData(response.data || []);
+  //   } catch (err) {
+  //     // console.error("API Error:", err);
+  //     setHasError(true);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+  const [showData, setShowData] = useState(false);
+
+  const dummyDatas = [
+    {
+      month: 1,
+      year: 2024,
     },
-    // {
-    //   month: 2, // February
-    //   year: 2024,
-    //    // Numerical details
-    // },
-  ]);
+    {
+      month: 2,
+      year: 2024,
+    },
+  ];
 
-  const [isLoading, setIsLoading] = useState(false); // Loading state
-  const [hasError, setHasError] = useState(false); // Error state
-
-  const handleAppraisal = async () => {
-    setIsLoading(true);
-    setHasError(false);
-
-    try {
-      const response = await axios.post(
-        "https://chatbotcv-t5h0c8cj.b4a.run/generate_appraisal_report",
-        {
-          from_date: startDate,
-          to_date: endDate,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      // Update state with API response
-      setAppraisalData(response.data || []);
-    } catch (err) {
-      // console.error("API Error:", err);
-      setHasError(true);
-    } finally {
-      setIsLoading(false);
-    }
+  const handleAppraisal = () => {
+    setShowData(prevState => !prevState); // Toggle data visibility on button click
   };
 
 
@@ -513,14 +529,14 @@ const BulkRecordhandle = async (index) => {
     <input
       type="text"
       placeholder="Company Name"
-      value={company_name}
+      value={ company_name}
       onChange={(e) => setcompany_name(e.target.value)}
       className="w-1/3 bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
     />
     <input
       type="text"
       placeholder="Keyword"
-      value={keyword}
+      value={keywords}
       onChange={(e) => setkeyword(e.target.value)}
       className="w-1/2 bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
     />
@@ -609,9 +625,7 @@ const BulkRecordhandle = async (index) => {
                 onChange={(e) => handleInputChange(index, 'date', e.target.value)}
                 // className="text-white w-1/3 px-3 py-2 bg-[#4F4B68] border border-gray-700 rounded-lg text-gray-300 focus:outline-none"
                 className="text-gray-300 w-1/6 px-2 py-2 bg-[#4F4B68] border border-gray-700 rounded-lg text-gray-300 focus:outline-none"
-
               />
-
               <input
                 type="text"
                 value={entry.company_name}
@@ -620,10 +634,7 @@ const BulkRecordhandle = async (index) => {
                 // className="w-1/4 px-3 py-2 bg-[#4F4B68] border border-gray-700 rounded-lg text-gray-300 focus:outline-none -ml-25"
                 // className="w-1/4 px-2 py-1 bg-[#4F4B68] border border-gray-700 rounded-lg text-gray-300 focus:outline-none"
                 className="w-1/3 bg-[#4F4B68] text-gray-300 p-3 rounded-lg outline-none -ml-11"
-
-
               />
-
               <input
                 type="text"
                 value={entry.keywords}
@@ -668,7 +679,7 @@ const BulkRecordhandle = async (index) => {
       </div>
       <div className=" item-left text-left w-full p-8 rounded-lg shadow-lg" ref={viewJourRef}>  
         <button
-          onClick={fetchJournalEntries}
+          onClick={fetchJournalEntrieshandle}
           className="text-xl text-center font-bold py-2  bg-[#4F4B68] rounded-full inline-block w-[12%]"
         >
           View Journal
@@ -698,7 +709,7 @@ const BulkRecordhandle = async (index) => {
             className=" bg-[#4F4B68] text-white rounded-lg py-3 px-4 focus:outline-none w-full"
           />
           <button
-            onClick={fetchJournalEntries}
+            onClick={fetchJournalEntrieshandle}
             className=" bg-[#4F4B68] hover: bg-[#4F4B68] text-white font-bold py-3 px-6 rounded w-full"
           >
             Search
@@ -732,7 +743,7 @@ const BulkRecordhandle = async (index) => {
     <input
       type="text"
       placeholder="Company Name"
-      value={entry.companyName}
+      value={entry.company_name}
       onChange={(e) => setcompany_name(e.target.value)}
       className="w-1/3 bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
     />
@@ -853,12 +864,12 @@ const BulkRecordhandle = async (index) => {
         {isLoading ? "Generating..." : "Generate Report"}
       </button>
       </div> */}
-<div className="flex items-center justify-between space-x-2 mb-6 flex-row mt-6">
+{/* <div className="flex items-center justify-between space-x-2 mb-6 flex-row mt-6">
 <span>From</span>
   <div className="flex flex-col">
     <input
       type="text"
-      placeholder="From: YY-MM-DD"
+      placeholder="From: YY-MM"
       value={startDate}
       onChange={(e) => setStartDate(e.target.value)}
       className="bg-[#4F4B68] text-white rounded-lg py-3 px-4 focus:outline-none"
@@ -869,7 +880,7 @@ const BulkRecordhandle = async (index) => {
     
     <input
       type="text"
-      placeholder="To: YY-MM-DD"
+      placeholder="To: YY-MM"
       value={endDate}
       onChange={(e) => setEndDate(e.target.value)}
       className="bg-[#4F4B68] text-white rounded-lg py-3 px-4 focus:outline-none"
@@ -882,45 +893,51 @@ const BulkRecordhandle = async (index) => {
   >
     {isLoading ? "Generating..." : "Generate Report"}
   </button>
-</div>
+</div> */}
+    <div className="flex flex-col space-y-6">
+      {/* Input Section */}
+      <div className="flex items-center justify-between space-x-2 mb-6 flex-row mt-6">
+        <span>From</span>
+        <div className="flex flex-col">
+          <input
+            type="text"
+            placeholder="From: MM-YY"
+            className="bg-[#4F4B68] text-white rounded-lg py-3 px-4 focus:outline-none"
+          />
+        </div>
+        <span>To</span>
+        <div className="flex flex-col">
+          <input
+            type="text"
+            placeholder="To: MM-YY"
+            className="bg-[#4F4B68] text-white rounded-lg py-3 px-4 focus:outline-none"
+          />
+        </div>
+        <button
+          onClick={handleAppraisal}
+          className="bg-[#4F4B68] hover:bg-[#6B6584] text-white font-bold py-3 px-6 rounded-lg"
+        >
+          Generate Report
+        </button>
+      </div>
 
-      {/* Generate Button */}
-      
-
-      {/* Error Message */}
-      {hasError && (
-        <div className="text-red-500 font-semibold mb-4">
-          Failed to fetch data. Please try again.
+      {/* Show/Hide Dummy Data */}
+      {showData && (
+        <div className="bg-[#4F4B68] h-20 p-4 mb-6 rounded-lg">
+          {dummyDatas.map((entry, index) => (
+            <div key={index}>
+              <h4 className="text-xl font-bold">
+                {entry.month}/{entry.year}
+              </h4>
+            </div>
+          ))}
         </div>
       )}
-
-      {/* Journal Entries Section */}
-      {/* <div className=""> */}
-<div className="bg-[#4F4B68] p-4 rounded-lg shadow-lg mb-4 text-xl font-bold">Month/Year
-        {appraisalData.length > 0 ? (
-          appraisalData.map((entry, index) => (
-            
-            <div
-              key={index}
-              // className=""
-            >
-              {/* <h1 className="text-2xl font-bold">Month/Year</h1> */}
-              {/* <div className="text-center font-semibold text-lg"> */}
-              
-                <h4 className="text-xl font-bold">{entry.month}/{entry.year}</h4> 
-                {/* <li> {entry.details[0]}</li>
-                <li>(%): {entry.details[1]}</li> */}
-            {/* </ul> */}
-            </div>
-          ))
-        ) : (  
-           <div className="text-gray-400">No data available. Please generate a report.</div>
-        )}
-        </div>
+    </div>
+      
     <div className="flex items-center justify-end space-x-4">
     <button
       className="bg-[#4F4B68] hover:bg-[#4F4B68] text-white font-bold py-2 px-4 rounded-full mt-4 w-[20%]"
-     
     >
       copy text
     </button>
@@ -935,7 +952,7 @@ const BulkRecordhandle = async (index) => {
           </div>
           <div className="mt-4 flex flex-col md:flex-row md:justify-between items-center text-xs text-gray-300">
             <div className="flex space-x-6">
-              <span className="z-10 text-xs text-gray-300 px-2">Quick Links :</span>
+                         <span className="z-10 text-xs text-gray-300 px-2">Quick Links :</span>
               <Link href="/Home" className="hover:text-white">Home</Link>
               <Link href="/login" className="hover:text-white">Login</Link>
               <Link href="/Signup" className="hover:text-white">Signup</Link>
