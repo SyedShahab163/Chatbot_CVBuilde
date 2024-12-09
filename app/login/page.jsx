@@ -1,7 +1,7 @@
 "use client";
 import { useState } from 'react';
 import Link from 'next/link';
-
+import apiUrls from "../globalapis/page"
 const Page = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -23,7 +23,7 @@ const Page = () => {
       return;
     }
     try {
-      const response = await fetch(`https://chatbotcv-t5h0c8cj.b4a.run/login`, {
+      const response = await fetch(apiUrls.login, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
