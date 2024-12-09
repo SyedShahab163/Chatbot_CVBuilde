@@ -924,8 +924,7 @@ const BulkRecordhandle = async (index) => {
             </div>
           ))
         ) : (
-          <p className="text-gray-400">
-            No CV pointers generated yet. Enter a description and click "Generate CV."
+          <p className="text-gray-400">"
           </p>
         )}
       </div>
