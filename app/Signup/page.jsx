@@ -7,7 +7,7 @@ import {useRouter} from "next/navigation";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import Footer from "../Footers/page";
-
+import apiUrls from "../globalapis/page"
 
 export default function SignupPage() {0
     const router = useRouter();
@@ -18,11 +18,11 @@ export default function SignupPage() {0
     })
     const [buttonDisabled, setButtonDisabled] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
-
+//https://chatbotcv-t5h0c8cj.b4a.run/signup
     const onSignup = async () => {
         try {
             setLoading(true);
-            const response = await axios.post("https://chatbotcv-t5h0c8cj.b4a.run/signup", user, {
+            const response = await axios.post(apiUrls.signup, user, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*',  // Adjust based on backend settings

@@ -3,6 +3,7 @@
  import { useRef } from 'react';
  import Link from 'next/link';
  import axios from "axios";
+ import apiUrls from "../globalapis/page"
  export default function DetailPage() {
   const [selectedType, setSelectedType] = useState(""); // To store selected type
   const [description, setDescription] = useState(""); // To cv generatestore description
@@ -39,7 +40,7 @@
 
     try {
       // const response = await fetch("https://chatbotcv-t5h0c8cj.b4a.run/entry_to_gpt", {
-      const response = await fetch('http://127.0.0.1:8000/entry_to_gpt', {   
+      const response = await fetch(apiUrls.entry_to_gpt, {   
   
         method: "POST",
         headers: {
@@ -100,7 +101,7 @@
 
     // try {
       // const response = await fetch('https://chatbotcv-t5h0c8cj.b4a.run/upload_pdf', { //
-        const response = await fetch('http://127.0.0.1:8000/upload_pdf', {   
+        const response = await fetch(apiUrls.upload_pdf, {   
         method: 'POST',
         body: formData,
       });
@@ -162,7 +163,7 @@
 
     try {
       // API call
-      const response = await axios.get("https://chatbotcv-t5h0c8cj.b4a.run/view_journal", {
+      const response = await axios.get(apiUrls.view_journal, {
         params: {
           keywords,
           from_date: fromDate,
@@ -196,7 +197,7 @@
     console.log("-------entry record-----------------data---------------------------",data)
 
     try {
-      const response = await fetch('https://chatbotcv-t5h0c8cj.b4a.run/record_entry', {
+      const response = await fetch(apiUrls.record_entry, {
         // const response = await fetch('http://127.0.0.1:8000/record_entry', {
         method: 'POST',
         headers: {
@@ -259,7 +260,7 @@ const BulkRecordhandle = async (index) => {
   // Post the data to the server
   try {
     // const response = await fetch('https://chatbotcv-t5h0c8cj.b4a.run/record_entry', {
-    const response = await fetch('http://127.0.0.1:8000/record_entry', {
+    const response = await fetch(apiUrls.record_entry, {
 
       method: 'POST',
       headers: {
@@ -307,7 +308,7 @@ const BulkRecordhandle = async (index) => {
 
     // try {
       // const response = await fetch("https://chatbotcv-t5h0c8cj.b4a.run/generate_cv", {
-      const response = await fetch("http://127.0.0.1:8000/generate_cv", {
+      const response = await fetch(apiUrls.generate_cv, {
 
         method: "POST",
         headers: {
@@ -447,20 +448,46 @@ const BulkRecordhandle = async (index) => {
   // };
 
 
+  const [copyText, setCopyText] = useState([]); // State for report data
+  const [copySuccess, setCopySuccess] = useState(false); // State to manage success message
+
   const GenerateAppraisalPointer = async () => {
     const reportData = [
       { month: "01", year: "2024", work1: "Completed project A", work2: "Led team meeting" },
-      { month: "02", year: "2024", work2: "Started a new role",work1: "Developed feature B"  },
-  
+      { month: "02", year: "2024", work1: "Developed feature B", work2: "Started a new role" },
     ];
 
     try {
-      setreport(reportData); // Set the hardcoded data to state
+      setCopyText(reportData); // Update report data
     } catch (error) {
- 
+      console.error("Error generating report:", error);
     }
   };
 
+  const handleCopyText = () => {
+    if (copyText.length > 0) {
+      const textToCopy = copyText
+        .map(
+          (entry) =>
+            `${entry.month}/${entry.year}\n` +
+            Object.keys(entry)
+              .filter((key) => key.startsWith("work"))
+              .map((key) => `- ${entry[key]}`)
+              .join("\n")
+        )
+        .join("\n\n");
+
+      navigator.clipboard
+        .writeText(textToCopy)
+        .then(() => {
+          setCopySuccess(true); // Show success message
+          setTimeout(() => setCopySuccess(false), 2000); // Hide message after 2 seconds
+        })
+        .catch((err) => {
+          console.error("Failed to copy text:", err); // Handle copy error
+        });
+    }
+  };
   return (
     <div className="min-h-screen item-center bg-gradient-to-b from-[#131120] to-[#000080] text-white p-4">
       <div className="w-full max-w-8xl mx-auto bg-gradient-to-b from-[#504686] to-[#131120] text-white rounded-lg p-8 shadow-full mt-4">
@@ -505,9 +532,10 @@ const BulkRecordhandle = async (index) => {
             >
               Professional
             </button>
+            <div className="p-2 ph-2">|</div>
             <button
               className={`py-2 px-4 rounded-lg ${
-                selectedType === "Educational" ? "bg-[#4F4B68]" : "bg-[#4F4B68]"
+                selectedType === "Educational" ? "bg-[#4F4B68]" : "bg-[#4F4B68]0"
               }`}
               onClick={() => setSelectedType("Educational")}
             >
@@ -772,7 +800,7 @@ const BulkRecordhandle = async (index) => {
     <input
       type="text"
       placeholder="Keyword"
-      value={entry.keyword}
+      value={entry.keywords}
       onChange={(e) => setkeyword(e.target.value)}
       className="w-1/2 bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
     />
@@ -854,75 +882,13 @@ const BulkRecordhandle = async (index) => {
       <button className=" bg-[#4F4B68] hover:bg-[#4F4B68] text-white font-bold py-2 px-4 rounded-full mt-6 w-[18%]">
         Generate Appraisal Report
       </button>
-
- {/* <div className="p-6 bg-[#131120] min-h-screen text-white"> */}
-      {/* Date Range Input Section */}
-      {/* <div className="flex items-center justify-between space-x-2 mb-6">
-        <div className="flex flex-col">
-          <span>From</span>
-          <input
-            type="text"
-            placeholder="From: YY-MM-DD"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="bg-[#4F4B68] text-white rounded-lg py-3 px-4 focus:outline-none"
-          />
-        </div>
-        <div className="flex flex-col">
-          <span>To</span>
-          <input
-            type="text"
-            placeholder="To: YY-MM-DD"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            className="bg-[#4F4B68] text-white rounded-lg py-3 px-4 focus:outline-none"
-          />
-        </div>
-        <button
-        onClick={handleAppraisal}
-        className="bg-[#4F4B68] hover:bg-[#6B6584] text-white font-bold py-2 px-4 rounded-full mb-6"
-        disabled={isLoading}
-      >
-        {isLoading ? "Generating..." : "Generate Report"}
-      </button>
-      </div> */}
-{/* <div className="flex items-center justify-between space-x-2 mb-6 flex-row mt-6">
-<span>From</span>
-  <div className="flex flex-col">
-    <input
-      type="text"
-      placeholder="From: YY-MM"
-      value={startDate}
-      onChange={(e) => setStartDate(e.target.value)}
-      className="bg-[#4F4B68] text-white rounded-lg py-3 px-4 focus:outline-none"
-    />
-  </div>
-  <span>To</span>
-  <div className="flex flex-col">
-    
-    <input
-      type="text"
-      placeholder="To: YY-MM"
-      value={endDate}
-      onChange={(e) => setEndDate(e.target.value)}
-      className="bg-[#4F4B68] text-white rounded-lg py-3 px-4 focus:outline-none"
-    />
-  </div>
-  <button
-    onClick={handleAppraisal}
-    className="bg-[#4F4B68] hover:bg-[#6B6584] text-white font-bold py-3 px-6 rounded-lg"
-    disabled={isLoading}
-  >
-    {isLoading ? "Generating..." : "Generate Report"}
-  </button>
-</div> */}
     <div className="flex flex-col space-y-6">
       {/* Input Section */}
       <div className="flex items-center justify-between space-x-2 mb-6 flex-row mt-6">
         <span>From</span>
         <div className="flex flex-col">
           <input
-            type="text"
+            type="date"
             placeholder="From: MM-YY"
             className="bg-[#4F4B68] text-white rounded-lg py-3 px-4 focus:outline-none"
           />
@@ -930,7 +896,7 @@ const BulkRecordhandle = async (index) => {
         <span>To</span>
         <div className="flex flex-col">
           <input
-            type="text"
+            type="date"
             placeholder="To: MM-YY"
             className="bg-[#4F4B68] text-white rounded-lg py-3 px-4 focus:outline-none"
           />
@@ -941,37 +907,18 @@ const BulkRecordhandle = async (index) => {
         >
           Generate Report
         </button>
-      </div>
-    {/* <div className="mt-6 bg-[#4F4B68] p-4 rounded-lg text-white">
-      {report.length > 0 ? (
-        report.map((entry, index) => (
-          <div key={index} className="mb-6">
-            <h3 className="font-semibold text-lg">
-            {entry.month}/{entry.year}
-            </h3>
-            <ul className="list-disc pl-6 mt-2">
-              {Object.keys(entry)
-                .filter((key) => key.startsWith("work"))
-                .map((key, i) => (
-                  <li key={i}>{entry[key]}</li>
-                ))}
-            </ul>
-          </div>
-        ))
-      ) : (
-        <p className="text-gray-400">No CV pointers generated yet. Enter a description and click "Generate CV."</p>
-      )}
-    </div> */}
-   <div className="mt-6 bg-[#4F4B68] p-4 rounded-lg text-white">
-        {report.length > 0 ? (
-          report.map((entry, index) => (
-            <div key={index} className="mb-6">
+      </div>     
+      <div className="mt-6 bg-[#4F4B68] p-4 rounded-lg text-white relative">
+      <h1 className="font-bold p-2"> Generate Appraisal Report</h1>
+        {copyText.length > 0 ? (
+          copyText.map((entry, index) => (
+            <div key={index} className="mb-6 mt-2">
               <h3 className="font-semibold text-lg">
                 {entry.month}/{entry.year}
               </h3>
               <ul className="list-disc pl-6 mt-2">
                 {Object.keys(entry)
-                  .filter((key) => key.startsWith("work")) // Only include "work"-prefixed keys
+                  .filter((key) => key.startsWith("work"))
                   .map((key, i) => (
                     <li key={i}>{entry[key]}</li>
                   ))}
@@ -979,21 +926,28 @@ const BulkRecordhandle = async (index) => {
             </div>
           ))
         ) : (
-          <p className="text-gray-400">"
-          </p>
+          <p className="text-gray-400">No report generated yet.</p>
+        )}
+
+        {/* Success Message */}
+        {copySuccess && (
+          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-sm font-bold py-2 px-4 rounded-lg shadow-lg mt-4">
+            Copy successfully!
+          </div>
         )}
       </div>
 
+      <div className="flex items-center justify-end space-x-4">
+        <button
+          onClick={handleCopyText}
+          className="bg-[#4F4B68] hover:bg-[#4F4B68] text-white font-bold py-2 px-4 rounded-full mt-4 w-[20%]"
+        >
+          Copy Text
+        </button>
+      </div>
     </div>
-  
-    <div className="flex items-center justify-end space-x-4">
-    <button
-      className="bg-[#4F4B68] hover:bg-[#4F4B68] text-white font-bold py-2 px-4 rounded-full mt-4 w-[20%]"
-    >
-      copy text
-    </button>
-  </div>
     </div>
+
       <footer className="w-full">
         <div className="container mx-auto px-8 w-full">
           <div className="relative flex items-center justify-center w-full">
