@@ -158,7 +158,7 @@ export default function SignupPage() {0
 
           {/* //  className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600">{buttonDisabled ? "No signup" : "Signup"}</button> */}
              {/* <Link href="/login">Visit login page</Link> */}
-              <button  className="w-full bg-blue-800 text-white py-2 text-red-500 rounded hover:bg-blue-800 transition mt-6">  continue with Google</button>
+             
                 </form>
               </div>
               <div><Footer/></div>
