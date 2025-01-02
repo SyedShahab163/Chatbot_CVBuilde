@@ -7,7 +7,7 @@
  export default function DetailPage() {
   const [selectedType, setSelectedType] = useState(""); // To store selected type
   const [description, setDescription] = useState(""); // To cv generatestore description
-
+  const [loading, setLoading] = useState(false);
   const [cv_description, set_cv_description] = useState(""); // To cv generatestore description
   const [cv_error, set_Cv_Error] = useState(false);
 
@@ -31,8 +31,9 @@
   const [bulkData, setBulkData] = useState([]); // Initialize state with the API data
   const cvRef = useRef(null);
   const viewJourRef = useRef(null);
-
+    
   const handleSubmit = async () => {
+    setLoading(true);
     if (!selectedType || !description) {
       alert("Please select a type and add a description!");
       return;
@@ -67,6 +68,7 @@
         //${response.status}
       }
     } catch (error) {
+      setLoading(false);
       setApiResponse(`Error: `);
      // ${error.message}
     }
@@ -137,7 +139,7 @@
 
   // State for journal entries
   const [journalEntries, setJournalEntries] = useState([]);
-  const [loading, setLoading] = useState(false);
+
   const [error, setError] = useState(false);
   const [journalEntrie, setJournalEntrie] = useState([]);
   // Dummy Data (for fallback in case of API error)
@@ -170,7 +172,7 @@
           to_date: toDate,
         },
       });
-
+// console.log(view_journal,"------==============view_journal====")
       // Update journal entries state
       setJournalEntries(response.data || []);
     } catch (err) {
@@ -178,7 +180,7 @@
 
       // Use dummy data as fallback
       setError(true);
-      setJournalEntries(dummyData);
+      // setJournalEntries(dummyData);
     } finally {
       setLoading(false);
     }
@@ -570,7 +572,7 @@ const BulkRecordhandle = async (index) => {
   {/* Inputs */}
   <div className="flex gap-30 mb-4 p-6">
     <input
-      type="text"
+      type="date"
       value={date}
       onChange={(e) => setdate(e.target.value)}
       placeholder="Date"
@@ -745,17 +747,17 @@ const BulkRecordhandle = async (index) => {
             className=" bg-[#4F4B68] text-white rounded-lg py-3 px-4 focus:outline-none w-full"
           />
           <input
-            type="text"
+            type="date"
             placeholder="From: YY-MM-DD"
             value={fromDate}
             onChange={(e) => setFromDate(e.target.value)}
             className=" bg-[#4F4B68] text-white rounded-lg py-3 px-4 focus:outline-none w-full"
           />
           <input
-            type="text"
+            type="date"
             placeholder="To: YY-MM-DD"
             value={toDate}
-            onChange={(e) => setToDate(e.target.value)}
+       onChange={(e) => setToDate(e.target.value)}
             className=" bg-[#4F4B68] text-white rounded-lg py-3 px-4 focus:outline-none w-full"
           />
           <button
@@ -770,7 +772,7 @@ const BulkRecordhandle = async (index) => {
         {loading && <div className="text-white text-center mt-4">Loading...</div>}
         {error && (
           <div className="text-red-500 text-center mt-4">
-            Error fetching data, showing dummy data instead.
+            plz your data is not working plz check.
           </div>
         )}
 
@@ -785,7 +787,7 @@ const BulkRecordhandle = async (index) => {
   <div className="flex gap-30 mb-4 p-6">
     <input
       type="text"
-      value={entry.date}
+      defaultValue={entry.date}
       onChange={(e) => setdate(e.target.value)}
       placeholder="Date"
       className="w-1/5 bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
@@ -793,14 +795,14 @@ const BulkRecordhandle = async (index) => {
     <input
       type="text"
       placeholder="Company Name"
-      value={entry.company_name}
+      defaultValue={entry.company_name}
       onChange={(e) => setcompany_name(e.target.value)}
       className="w-1/3 bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
     />
     <input
       type="text"
       placeholder="Keyword"
-      value={entry.keywords}
+      defaultValue={entry.keyword}
       onChange={(e) => setkeyword(e.target.value)}
       className="w-1/2 bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
     />
@@ -812,7 +814,7 @@ const BulkRecordhandle = async (index) => {
       rows="3"
       placeholder="Detail Description"
       className="w-[98%] bg-[#4F4B68] text-white p-3 rounded-lg outline-none"
-      value={entry.detail_description}
+      defaultValue={entry.detail_description}
      
     ></textarea>
   </div>
